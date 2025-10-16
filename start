@@ -1,0 +1,94 @@
+#!/bin/bash
+# AutoGetCars Crawler - Ultimate Launcher
+# One script to rule them all!
+
+cd "$(dirname "$0")"
+
+echo "🚗 AutoGetCars Crawler - Choose Your Method"
+echo "=========================================="
+echo
+
+# Check if .venv exists
+if [ ! -d ".venv" ]; then
+    echo "❌ Python environment not found!"
+    echo "💡 Run: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
+    exit 1
+fi
+
+echo "📋 Available Methods:"
+echo "--------------------"
+echo " 1. 🚀 Quick Menu (Smart defaults, 1-click options)"
+echo " 2. ⚙️ Advanced Menu (Full control, uses presets safely)" 
+echo " 3. 📁 Switch Presets (Change main .env configuration)"
+echo " 4. ⚡ Direct Run (Use current .env settings)"
+echo " 5. 📖 Help & Documentation"
+echo " q. 🚪 Quit"
+echo
+
+while true; do
+    read -p "Select method (1-5, q): " choice
+    
+    case $choice in
+        1)
+            echo "🚀 Launching Quick Menu..."
+            .venv/bin/python quick_crawler.py
+            ;;
+        2)  
+            echo "⚙️ Launching Advanced Menu..."
+            .venv/bin/python menu_crawler.py
+            ;;
+        3)
+            echo "📁 Launching Preset Switcher..."
+            ./switch-preset
+            ;;
+        4)
+            echo "⚡ Running crawler directly with current .env settings..."
+            .venv/bin/python crawler.py
+            break
+            ;;
+        5)
+            echo "📖 Help & Documentation"
+            echo "======================"
+            echo
+            echo "🚀 QUICK MENU:"
+            echo "   • One-click presets with smart defaults"
+            echo "   • BMW X5, Honda CR-V, Toyota Corolla quick options" 
+            echo "   • Advanced options available"
+            echo
+            echo "⚙️ ADVANCED MENU:"
+            echo "   • Uses preset files from presets/ folder"
+            echo "   • Does NOT modify your main .env file"
+            echo "   • Full customization of speed and pages"
+            echo
+            echo "📁 PRESET SWITCHER:"
+            echo "   • Changes your main .env configuration"
+            echo "   • 10 predefined car search presets"
+            echo "   • Automatic backups when switching"
+            echo
+            echo "⚡ DIRECT RUN:"
+            echo "   • Uses whatever is in your main .env"
+            echo "   • Most control over command line options"
+            echo "   • Good for testing specific settings"
+            echo
+            echo "📂 FILES:"
+            echo "   • Main config: .env"
+            echo "   • Preset configs: presets/.env.*"
+            echo "   • Results: docs/car-data.xlsx"
+            echo "   • Logs: crawler.log"
+            echo
+            read -p "Press Enter to continue..."
+            ;;
+        q|Q)
+            echo "👋 Happy car hunting!"
+            exit 0
+            ;;
+        *)
+            echo "❌ Invalid choice. Please try again."
+            ;;
+    esac
+    
+    echo
+    echo "Press Enter to return to menu..."
+    read
+    echo
+done
