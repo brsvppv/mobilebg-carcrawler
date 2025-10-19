@@ -72,24 +72,45 @@ def write_rows_to_excel(excel_path, sheet_name, data, headers, key_map):
     # Ensure a table exists and covers all data
     if ws.max_row > 1:  # Only if there's data
         try:
-            table_name = f"Table_{sheet_name}" if sheet_name else "Table1"
+            # Create a valid table name (no spaces, special chars)
+            table_name = f"Table_{sheet_name.replace('-', '_').replace(' ', '_')}" if sheet_name else "Table1"
+            
             # Remove existing tables to avoid conflicts
-            table_names = list(ws.tables.keys())
-            for table_name_to_remove in table_names:
-                del ws.tables[table_name_to_remove]
-            # Create new table
-            table_range = f"A1:{get_column_letter(len(headers))}{ws.max_row}"
+            existing_tables = list(ws.tables.keys())
+            for existing_table_name in existing_tables:
+                try:
+                    del ws.tables[existing_table_name]
+                except:
+                    pass  # Ignore errors when removing tables
+            
+            # Ensure we have valid range bounds
+            start_col = 1
+            end_col = len(headers)
+            start_row = 1
+            end_row = max(ws.max_row, 2)  # At least 2 rows (header + 1 data row)
+            
+            # Create table range - ensure it's valid
+            table_range = f"A{start_row}:{get_column_letter(end_col)}{end_row}"
+            
+            # Create new table with clean name
             table = Table(displayName=table_name, ref=table_range)
+            
+            # Apply table style
             style = TableStyleInfo(
-                name="TableStyleMedium2", showFirstColumn=False,
-                showLastColumn=False, showRowStripes=True, showColumnStripes=False
+                name="TableStyleMedium2", 
+                showFirstColumn=False,
+                showLastColumn=False, 
+                showRowStripes=True, 
+                showColumnStripes=False
             )
             table.tableStyleInfo = style
+            
+            # Add table to worksheet
             ws.add_table(table)
-            # Expand table to fit content
-            expand_table_to_fit(ws, table_name=table_name)
+            
         except Exception as e:
             logging.warning(f"Could not create table: {e}")
+            # Continue without table formatting
     
     # Auto-size all columns for better readability
     for column in ws.columns:
