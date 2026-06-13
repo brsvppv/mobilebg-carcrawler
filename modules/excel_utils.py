@@ -11,6 +11,18 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils import get_column_letter
 from modules.excel_table_utils import expand_table_to_fit
 
+def safe_print(text):
+    """Prints text safely, fallback if console doesn't support unicode emojis."""
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        try:
+            print(text.encode(sys.stdout.encoding or 'utf-8', errors='replace').decode(sys.stdout.encoding or 'utf-8'))
+        except Exception:
+            # Absolute fallback
+            print(text.encode('ascii', errors='replace').decode('ascii'))
+
+
 
 def write_rows_to_excel(excel_path, sheet_name, data, headers, key_map):
     """
@@ -36,7 +48,7 @@ def write_rows_to_excel(excel_path, sheet_name, data, headers, key_map):
         ws.title = sheet_name if sheet_name else "Cars"
         ws.append(headers)
         wb.save(excel_path)
-        print(f"📝 Created new Excel file: {excel_path}")
+        safe_print(f"📝 Created new Excel file: {excel_path}")
     
     try:
         wb = load_workbook(excel_path)
@@ -48,7 +60,7 @@ def write_rows_to_excel(excel_path, sheet_name, data, headers, key_map):
         ws.title = sheet_name if sheet_name else "Cars"
         ws.append(headers)
         wb.save(excel_path)
-        print(f"📝 Recreated Excel file: {excel_path}")
+        safe_print(f"📝 Recreated Excel file: {excel_path}")
     
     wb = load_workbook(excel_path)
     if sheet_name and sheet_name in wb.sheetnames:
@@ -58,7 +70,7 @@ def write_rows_to_excel(excel_path, sheet_name, data, headers, key_map):
         if sheet_name and sheet_name not in wb.sheetnames:
             ws = wb.create_sheet(sheet_name)
             ws.append(headers)  # Add headers to new sheet
-            print(f"📋 Created new sheet: {sheet_name}")
+            safe_print(f"📋 Created new sheet: {sheet_name}")
         else:
             ws = wb.active
     
@@ -168,7 +180,7 @@ def export_to_excel(cars_data, excel_path=None, sheet_name=None):
     excel_dir = os.path.dirname(excel_path)
     if excel_dir and not os.path.exists(excel_dir):
         os.makedirs(excel_dir, exist_ok=True)
-        print(f"📁 Created directory: {excel_dir}")
+        safe_print(f"📁 Created directory: {excel_dir}")
     
     # Use existing function to write data
     result_path = write_rows_to_excel(
@@ -179,5 +191,5 @@ def export_to_excel(cars_data, excel_path=None, sheet_name=None):
         key_map=key_map
     )
     
-    print(f"📊 Exported {len(cars_data)} cars to: {result_path}")
+    safe_print(f"📊 Exported {len(cars_data)} cars to: {result_path}")
     return result_path
