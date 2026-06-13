@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AutoGetCars - Premium Crawler Dashboard{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">🚗</span>
+                <div class="logo-text">
+                    <h1>AutoGetCars</h1>
+                    <span>CRAWLER PLATFORM</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'crawler' %}" class="{% if request.resolver_match.url_name == 'crawler' %}active{% endif %}">
+                            <span class="nav-icon">⚡</span>
+                            <span class="nav-text">Run Scraper</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'results' %}" class="{% if request.resolver_match.url_name == 'results' %}active{% endif %}">
+                            <span class="nav-icon">🔍</span>
+                            <span class="nav-text">Scraped Cars</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'presets' %}" class="{% if request.resolver_match.url_name == 'presets' or request.resolver_match.url_name == 'create_preset' or request.resolver_match.url_name == 'edit_preset' %}active{% endif %}">
+                            <span class="nav-icon">⚙️</span>
+                            <span class="nav-text">Presets Manager</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <span class="status-indicator online"></span>
+                    <span class="status-text">System Live</span>
+                </div>
+                <div class="footer-meta">v2.0 • Web Edition</div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-search">
+                    <!-- Space for search/filters if needed -->
+                </div>
+                <div class="user-profile">
+                    <div class="time-widget">
+                        <span class="clock-icon">🕒</span>
+                        <span id="current-time"></span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-body">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Real-time clock widget
+        function updateTime() {
+            const timeSpan = document.getElementById('current-time');
+            if (timeSpan) {
+                const now = new Date();
+                timeSpan.textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+            }
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        // HTMX CSRF Token Integration
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

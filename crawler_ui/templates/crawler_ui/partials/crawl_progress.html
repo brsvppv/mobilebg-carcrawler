@@ -1,0 +1,76 @@
+<div class="crawl-progress-box"
+     {% if session.status == 'running' %}
+     hx-get="{% url 'crawl_status' session.id %}"
+     hx-trigger="every 2s"
+     hx-swap="outerHTML"
+     {% endif %}>
+     
+    <div class="panel-header">
+        <h3>Crawling Status</h3>
+        <span class="badge {{ session.status }}">{{ session.get_status_display }}</span>
+    </div>
+    
+    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+        {{ session.search_description }}
+    </p>
+
+    <!-- Progress Bar -->
+    <div class="progress-header">
+        <span>Processing links...</span>
+        <span>{{ progress }}%</span>
+    </div>
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" style="width: {{ progress }}%;"></div>
+    </div>
+    
+    <!-- Counters -->
+    <div class="progress-metrics">
+        <div class="progress-stat">
+            <span>Discovered</span>
+            <strong>{{ session.total_found|default:"-" }}</strong>
+        </div>
+        <div class="progress-stat" style="border-color: rgba(16, 185, 129, 0.2);">
+            <span>Scraped</span>
+            <strong style="color: var(--accent-emerald);">{{ session.success_count }}</strong>
+        </div>
+        <div class="progress-stat" style="border-color: rgba(244, 63, 94, 0.2);">
+            <span>Failed</span>
+            <strong style="color: var(--accent-rose);">{{ session.fail_count }}</strong>
+        </div>
+    </div>
+
+    <!-- Live Console Logs -->
+    <h4 style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Execution Console:</h4>
+    <div class="log-console"
+         id="console-logs"
+         {% if session.status == 'running' %}
+         hx-get="{% url 'crawl_logs' session.id %}"
+         hx-trigger="every 1.5s"
+         hx-swap="innerHTML"
+         {% endif %}>{{ session.logs|default:"Initializing session worker..." }}</div>
+         
+    <!-- JavaScript to auto-scroll log console -->
+    <script>
+        (function() {
+            const consoleBox = document.getElementById('console-logs');
+            if (consoleBox) {
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            }
+        })();
+    </script>
+
+    <!-- Action Buttons -->
+    <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        {% if session.status == 'running' %}
+            <form hx-post="{% url 'stop_crawl' session.id %}" hx-target="#crawler-control-panel">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">🛑 Stop Crawler</button>
+            </form>
+        {% else %}
+            {% if session.excel_file_path %}
+                <a href="{% url 'export_session' session.id %}" class="btn btn-primary" download>💾 Download Excel File</a>
+            {% endif %}
+            <a href="{% url 'crawler' %}" class="btn btn-secondary">🔄 Run New Crawl</a>
+        {% endif %}
+    </div>
+</div>

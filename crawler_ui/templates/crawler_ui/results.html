@@ -1,0 +1,63 @@
+{% extends 'crawler_ui/base.html' %}
+
+{% block title %}Scraped Cars - AutoGetCars{% endblock %}
+
+{% block content %}
+<div class="page-title-block">
+    <div style="display:flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h2>Scraped Cars Database</h2>
+            <p>Browse, filter, and export extracted vehicle offers</p>
+        </div>
+        <div>
+            <a href="{% url 'export_all' %}" class="btn btn-primary">💾 Export All to Excel</a>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filtering Panel -->
+<div class="glass-card" style="margin-bottom: 2rem; padding: 1.5rem;">
+    <form hx-get="{% url 'results' %}" 
+          hx-trigger="keyup changed delay:300ms from:#search-input, change from:#brand-select, change from:#fuel-select, change from:#transmission-select, keyup changed delay:500ms from:#min-price, keyup changed delay:500ms from:#max-price" 
+          hx-target="#results-table-container"
+          hx-swap="innerHTML"
+          class="filter-bar">
+          
+        <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" name="q" placeholder="Search by brand, model, description..." value="{{ query }}">
+        </div>
+        
+        <div style="display:flex; gap: 1rem; flex-wrap: wrap;">
+            <select name="brand" id="brand-select">
+                <option value="">All Brands</option>
+                {% for b in all_brands %}
+                    <option value="{{ b }}" {% if brand == b %}selected{% endif %}>{{ b|title }}</option>
+                {% endfor %}
+            </select>
+            
+            <select name="fuel_type" id="fuel-select">
+                <option value="">All Fuels</option>
+                <option value="dizel" {% if fuel_type == 'dizel' %}selected{% endif %}>Diesel</option>
+                <option value="benzin" {% if fuel_type == 'benzin' %}selected{% endif %}>Petrol</option>
+                <option value="hibrid" {% if fuel_type == 'hibrid' %}selected{% endif %}>Hybrid</option>
+                <option value="elek" {% if fuel_type == 'elek' %}selected{% endif %}>Electric</option>
+            </select>
+            
+            <select name="transmission" id="transmission-select">
+                <option value="">All Transmissions</option>
+                <option value="автоматик" {% if transmission == 'автоматик' %}selected{% endif %}>Automatic</option>
+                <option value="ръчна" {% if transmission == 'ръчна' %}selected{% endif %}>Manual</option>
+            </select>
+            
+            <input type="number" id="min-price" name="min_price" placeholder="Min BGN" style="width: 120px;" value="{{ min_price }}">
+            <input type="number" id="max-price" name="max_price" placeholder="Max BGN" style="width: 120px;" value="{{ max_price }}">
+        </div>
+    </form>
+</div>
+
+<!-- Table Container -->
+<div id="results-table-container">
+    {% include 'crawler_ui/partials/results_table.html' %}
+</div>
+{% endblock %}

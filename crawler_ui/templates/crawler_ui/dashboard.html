@@ -1,0 +1,139 @@
+{% extends 'crawler_ui/base.html' %}
+
+{% block title %}Dashboard - AutoGetCars{% endblock %}
+
+{% block content %}
+<div class="page-title-block">
+    <h2>Analytics Overview</h2>
+    <p>Real-time scraper database metrics and crawl histories</p>
+</div>
+
+<!-- Metrics Overview -->
+<div class="metrics-grid">
+    <div class="glass-card metric-card">
+        <div class="metric-icon-box">🚗</div>
+        <div class="metric-info">
+            <h3>Total Cars Scraped</h3>
+            <div class="metric-value">{{ total_listings }}</div>
+        </div>
+    </div>
+    
+    <div class="glass-card metric-card">
+        <div class="metric-icon-box">⏱️</div>
+        <div class="metric-info">
+            <h3>Crawl Sessions</h3>
+            <div class="metric-value">{{ total_sessions }}</div>
+        </div>
+    </div>
+    
+    <div class="glass-card metric-card">
+        <div class="metric-icon-box">💵</div>
+        <div class="metric-info">
+            <h3>Avg Price (BGN)</h3>
+            <div class="metric-value">
+                {% if avg_price_bgn %}
+                    {{ avg_price_bgn|filesizeformat|slice:":-2" }} BGN
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="glass-card metric-card">
+        <div class="metric-icon-box">💶</div>
+        <div class="metric-info">
+            <h3>Avg Price (EUR)</h3>
+            <div class="metric-value">
+                {% if avg_price_eur %}
+                    {{ avg_price_eur|filesizeformat|slice:":-2" }} €
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-layout">
+    <!-- Left Column: Recent Crawls -->
+    <div class="glass-card">
+        <div class="panel-header">
+            <h3>Recent Crawl Sessions</h3>
+            <a href="{% url 'crawler' %}" class="btn btn-secondary btn-sm">New Crawl</a>
+        </div>
+        
+        <div class="recent-list">
+            {% for session in recent_sessions %}
+                <div class="session-item">
+                    <div class="session-meta">
+                        <h4>{{ session.search_description }}</h4>
+                        <span>Started: {{ session.start_time|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <div class="session-stats">
+                        <div>
+                            <span class="badge {{ session.status }}">{{ session.get_status_display }}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <strong style="display:block; font-size: 1.1rem;">{{ session.success_count }}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Cars Scraped</span>
+                        </div>
+                        {% if session.excel_file_path %}
+                            <a href="{% url 'export_session' session.id %}" class="btn btn-secondary btn-xs" title="Download Excel">💾</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No crawl sessions run yet. Go to 'Run Scraper' to begin.</p>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Right Column: Location Distribution -->
+    <div class="glass-card">
+        <div class="panel-header">
+            <h3>Top Locations</h3>
+        </div>
+        
+        <div class="distributions">
+            {% for loc in location_data %}
+                <div class="dist-item">
+                    <div class="dist-label">
+                        <span>гр. {{ loc.location|title }}</span>
+                        <span>{{ loc.count }} cars</span>
+                    </div>
+                    <div class="dist-bar-bg">
+                        <!-- Calculate percentage assuming max list size as denominator or 100 -->
+                        <div class="dist-bar-fill" style="width: {% widthratio loc.count total_listings 100 %}%"></div>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No locations data available.</p>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Third Column: Top Brands -->
+    <div class="glass-card">
+        <div class="panel-header">
+            <h3>Top Brands</h3>
+        </div>
+        
+        <div class="distributions">
+            {% for br in top_brands %}
+                <div class="dist-item">
+                    <div class="dist-label">
+                        <span>{{ br.brand|title }}</span>
+                        <span>{{ br.count }} cars</span>
+                    </div>
+                    <div class="dist-bar-bg">
+                        <div class="dist-bar-fill" style="width: {% widthratio br.count total_listings 100 %}%"></div>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No brand data available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

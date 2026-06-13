@@ -1,0 +1,95 @@
+{% extends 'crawler_ui/base.html' %}
+
+{% block title %}{% if preset %}Edit{% else %}Create{% endif %} Search Preset - AutoGetCars{% endblock %}
+
+{% block content %}
+<div class="page-title-block">
+    <h2>{% if preset %}Edit{% else %}Create New{% endif %} Search Preset</h2>
+    <p>Define configuration filters for quick-run crawl sessions</p>
+</div>
+
+<div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+    <div class="panel-header">
+        <h3>Preset Details</h3>
+    </div>
+    
+    <form method="post" class="crawl-form">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="name">Preset Name *</label>
+                <input type="text" id="name" name="name" placeholder="e.g. BMW X5 - Sports Package" value="{{ preset.name|default:'' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="brand">Brand *</label>
+                <input type="text" id="brand" name="brand" placeholder="e.g. audi, bmw, toyota" value="{{ preset.brand|default:'' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="model">Model *</label>
+                <input type="text" id="model" name="model" placeholder="e.g. a4, series-5, corolla" value="{{ preset.model|default:'' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="vehicle_type">Vehicle Type</label>
+                <select id="vehicle_type" name="vehicle_type">
+                    <option value="sedan" {% if preset.vehicle_type == 'sedan' %}selected{% endif %}>Sedan</option>
+                    <option value="hechbek" {% if preset.vehicle_type == 'hechbek' %}selected{% endif %}>Hatchback</option>
+                    <option value="kombi" {% if preset.vehicle_type == 'kombi' %}selected{% endif %}>Combi / Estate</option>
+                    <option value="dzhip" {% if preset.vehicle_type == 'dzhip' %}selected{% endif %}>SUV / Offroad (dzhip)</option>
+                    <option value="kabrio" {% if preset.vehicle_type == 'kabrio' %}selected{% endif %}>Cabriolet</option>
+                    <option value="van" {% if preset.vehicle_type == 'van' %}selected{% endif %}>Van</option>
+                    <option value="minivan" {% if preset.vehicle_type == 'minivan' %}selected{% endif %}>Minivan</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="fuel_type">Fuel Type</label>
+                <select id="fuel_type" name="fuel_type">
+                    <option value="dizelov" {% if preset.fuel_type == 'dizelov' %}selected{% endif %}>Diesel (dizelov)</option>
+                    <option value="benzinov" {% if preset.fuel_type == 'benzinov' %}selected{% endif %}>Gasoline / Petrol (benzinov)</option>
+                    <option value="hibrid" {% if preset.fuel_type == 'hibrid' %}selected{% endif %}>Hybrid (hibrid)</option>
+                    <option value="elektricheski" {% if preset.fuel_type == 'elektricheski' %}selected{% endif %}>Electric (elektricheski)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="min_price">Min Price (BGN)</label>
+                <input type="number" id="min_price" name="min_price" value="{{ preset.min_price|default:'5000' }}" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="max_price">Max Price (BGN)</label>
+                <input type="number" id="max_price" name="max_price" value="{{ preset.max_price|default:'30000' }}" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="min_power">Min Power (HP)</label>
+                <input type="number" id="min_power" name="min_power" value="{{ preset.min_power|default:'90' }}" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="max_power">Max Power (HP)</label>
+                <input type="number" id="max_power" name="max_power" value="{{ preset.max_power|default:'250' }}" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="max_pages">Page Limit</label>
+                <input type="number" id="max_pages" name="max_pages" value="{{ preset.max_pages|default:'20' }}" min="1" max="100">
+            </div>
+            
+            <div class="form-group">
+                <label for="delay">Crawl Delay (seconds)</label>
+                <input type="number" id="delay" name="delay" value="{{ preset.delay|default:'0.5' }}" step="0.1" min="0.1" max="5.0">
+            </div>
+        </div>
+        
+        <div style="display:flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+            <a href="{% url 'presets' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Preset</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

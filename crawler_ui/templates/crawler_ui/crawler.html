@@ -1,0 +1,125 @@
+{% extends 'crawler_ui/base.html' %}
+
+{% block title %}Run Scraper - AutoGetCars{% endblock %}
+
+{% block content %}
+<div class="page-title-block">
+    <h2>Run Scraper</h2>
+    <p>Configure search filters to crawl car listings from mobile.bg in real-time</p>
+</div>
+
+<div class="crawler-layout">
+    <!-- Left Column: Crawler Setup or Active Progress -->
+    <div class="glass-card" id="crawler-control-panel">
+        {% if running_session %}
+            <!-- If a session is already running, show the progress box immediately -->
+            {% include 'crawler_ui/partials/crawl_progress.html' with session=running_session %}
+        {% else %}
+            <!-- Scraper Configuration Form -->
+            <div class="panel-header">
+                <h3>Scraper Configuration</h3>
+            </div>
+            
+            <form hx-post="{% url 'start_crawl' %}" hx-target="#crawler-control-panel" hx-swap="innerHTML" class="crawl-form">
+                {% csrf_token %}
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="brand">Brand *</label>
+                        <input type="text" id="brand" name="brand" placeholder="e.g. audi, bmw, honda" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="model">Model *</label>
+                        <input type="text" id="model" name="model" placeholder="e.g. a4, series-3, cr-v" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vehicle_type">Vehicle Type</label>
+                        <select id="vehicle_type" name="vehicle_type">
+                            <option value="sedan">Sedan</option>
+                            <option value="hechbek">Hatchback</option>
+                            <option value="kombi">Combi / Estate</option>
+                            <option value="dzhip">SUV / Offroad</option>
+                            <option value="kabrio">Cabriolet</option>
+                            <option value="van">Van</option>
+                            <option value="minivan">Minivan</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fuel_type">Fuel Type</label>
+                        <select id="fuel_type" name="fuel_type">
+                            <option value="dizelov">Diesel (dizelov)</option>
+                            <option value="benzinov">Gasoline / Petrol (benzinov)</option>
+                            <option value="hibrid">Hybrid (hibrid)</option>
+                            <option value="elektricheski">Electric (elektricheski)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="min_price">Min Price (BGN)</label>
+                        <input type="number" id="min_price" name="min_price" value="5000" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="max_price">Max Price (BGN)</label>
+                        <input type="number" id="max_price" name="max_price" value="30000" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="min_power">Min Power (HP)</label>
+                        <input type="number" id="min_power" name="min_power" value="90" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="max_power">Max Power (HP)</label>
+                        <input type="number" id="max_power" name="max_power" value="250" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="max_pages">Page Limit</label>
+                        <input type="number" id="max_pages" name="max_pages" value="20" min="1" max="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="delay">Crawl Delay (seconds)</label>
+                        <input type="number" id="delay" name="delay" value="0.5" step="0.1" min="0.1" max="5.0">
+                    </div>
+                </div>
+                
+                <div style="display:flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary">🚀 Launch Scraper</button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    
+    <!-- Right Column: Quick Presets -->
+    <div class="glass-card">
+        <div class="panel-header">
+            <h3>Launch from Preset</h3>
+        </div>
+        
+        <div class="recent-list" style="max-height: 500px; overflow-y: auto;">
+            {% for preset in presets %}
+                <div class="session-item" style="padding: 1rem;">
+                    <div class="session-meta">
+                        <h4 style="font-size: 0.95rem;">{{ preset.name }}</h4>
+                        <span style="font-size: 0.75rem;">{{ preset.brand|title }} {{ preset.model|title }} • {{ preset.fuel_type }}</span>
+                    </div>
+                    <div>
+                        <form hx-post="{% url 'start_crawl' %}" hx-target="#crawler-control-panel" hx-swap="innerHTML">
+                            {% csrf_token %}
+                            <input type="hidden" name="preset_id" value="{{ preset.id }}">
+                            <button type="submit" class="btn btn-secondary btn-sm" {% if running_session %}disabled{% endif %}>Run</button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No presets defined yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

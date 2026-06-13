@@ -1,0 +1,93 @@
+<div class="table-container">
+    <table class="premium-table">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Price (BGN)</th>
+                <th>Price (EUR)</th>
+                <th>Fuel</th>
+                <th>Transmission</th>
+                <th>Mileage</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in page_obj %}
+                <tr>
+                    <td><strong>{{ car.brand|title }}</strong></td>
+                    <td><a href="{{ car.link }}" target="_blank" class="car-link">{{ car.model }}</a></td>
+                    <td>{{ car.production_date|default:"-" }}</td>
+                    <td>
+                        {% if car.price_bgn %}
+                            {{ car.price_bgn|filesizeformat|slice:":-2" }} лв.
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if car.price_eur %}
+                            {{ car.price_eur|filesizeformat|slice:":-2" }} €
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ car.fuel_type|default:"-" }}</td>
+                    <td>{{ car.transmission|default:"-" }}</td>
+                    <td>{{ car.mileage|default:"-" }}</td>
+                    <td>гр. {{ car.location|title|default:"-" }}</td>
+                    <td>{{ car.phone|default:"-" }}</td>
+                    <td>
+                        <button hx-post="{% url 'delete_listing' car.id %}" 
+                                hx-confirm="Are you sure you want to delete this listing?" 
+                                hx-target="closest tr" 
+                                hx-swap="outerHTML swap:400ms" 
+                                class="btn btn-danger btn-xs"
+                                style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="11" style="text-align: center; color: var(--text-secondary); padding: 3rem;">
+                        No car listings found matching your search.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination Controls -->
+{% if page_obj.has_other_pages %}
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} listings
+        </div>
+        <div class="pagination-controls">
+            {% if page_obj.has_previous %}
+                <button hx-get="?page={{ page_obj.previous_page_number }}&q={{ query }}&brand={{ brand }}&fuel_type={{ fuel_type }}&transmission={{ transmission }}&min_price={{ min_price }}&max_price={{ max_price }}"
+                        hx-target="#results-table-container"
+                        class="btn btn-secondary btn-sm">
+                    ◀ Previous
+                </button>
+            {% else %}
+                <button class="btn btn-secondary btn-sm" disabled style="opacity: 0.5;">◀ Previous</button>
+            {% endif %}
+            
+            {% if page_obj.has_next %}
+                <button hx-get="?page={{ page_obj.next_page_number }}&q={{ query }}&brand={{ brand }}&fuel_type={{ fuel_type }}&transmission={{ transmission }}&min_price={{ min_price }}&max_price={{ max_price }}"
+                        hx-target="#results-table-container"
+                        class="btn btn-secondary btn-sm">
+                    Next ▶
+                </button>
+            {% else %}
+                <button class="btn btn-secondary btn-sm" disabled style="opacity: 0.5;">Next ▶</button>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
