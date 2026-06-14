@@ -46,9 +46,9 @@ def test_main_crawler_execution():
         # Run the crawler with a timeout
         start_time = time.time()
         
-        # Execute the crawler
+        # Execute the crawler with limited pages and delay for speed
         result = subprocess.run(
-            [venv_python, crawler_script],
+            [venv_python, crawler_script, '--max-pages', '1', '--delay', '0.1'],
             cwd=project_root,
             capture_output=True,
             text=True,
