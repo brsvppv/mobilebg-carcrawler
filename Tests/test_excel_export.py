@@ -115,12 +115,12 @@ def test_excel_auto_creation():
         return False
 
 
-def test_excel_structure():
+def test_excel_structure(excel_path='docs/car-data.xlsx'):
     """Test Excel file structure and data integrity"""
     print('\n=== TESTING EXCEL STRUCTURE ===')
     
     try:
-        wb = load_workbook('docs/car-data.xlsx')
+        wb = load_workbook(excel_path)
         print(f'📋 Available sheets: {wb.sheetnames}')
         
         # Use the first sheet
@@ -209,8 +209,13 @@ if __name__ == '__main__':
     print('🧪 EXCEL EXPORT TEST SUITE')
     print('=' * 50)
     
+    # Load configuration to get the current file path
+    load_env_config()
+    config = get_output_config()
+    excel_path = config.get('excel_path', 'docs/car-data.xlsx')
+    
     success1 = test_excel_auto_creation()
-    success2 = test_excel_structure()
+    success2 = test_excel_structure(excel_path)
     success3 = test_new_sheet_creation()
     
     print('\n' + '=' * 50)

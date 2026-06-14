@@ -9,6 +9,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from modules.extractors import extract_car_info_mobile
+from Tests.test_helper import get_active_test_urls
 
 
 def test_production_date_extraction():
@@ -16,12 +17,8 @@ def test_production_date_extraction():
     print('🧪 PRODUCTION DATE EXTRACTION TEST')
     print('=' * 50)
     
-    # Test multiple cars to verify production date extraction
-    test_urls = [
-        'https://www.mobile.bg/obiava-21748341999589220-mitsubishi-outlander-2-4-awd-sheytsariya',
-        'https://www.mobile.bg/obiava-21729451673697804-mitsubishi-outlander-4x4',
-        'https://www.mobile.bg/obiava-11759077895164151-toyota-corolla'
-    ]
+    # Test multiple cars dynamically to verify production date extraction
+    test_urls = get_active_test_urls(3)
     
     success_count = 0
     total_tests = len(test_urls)

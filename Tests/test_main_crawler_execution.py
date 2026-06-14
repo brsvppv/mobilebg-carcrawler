@@ -20,7 +20,11 @@ def test_main_crawler_execution():
     # Get the project root directory
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     crawler_script = os.path.join(project_root, 'crawler.py')
-    venv_python = os.path.join(project_root, '.venv', 'bin', 'python')
+    
+    if os.name == 'nt':
+        venv_python = os.path.join(project_root, '.venv', 'Scripts', 'python.exe')
+    else:
+        venv_python = os.path.join(project_root, '.venv', 'bin', 'python')
     
     print(f'📁 Project root: {project_root}')
     print(f'🐍 Python executable: {venv_python}')
@@ -156,12 +160,10 @@ def test_quick_extraction_sample():
     print('=' * 50)
     
     from modules.extractors import extract_car_info_mobile
+    from Tests.test_helper import get_active_test_urls
     
-    # Test with 2 known URLs for speed
-    test_urls = [
-        'https://www.mobile.bg/obiava-21748341999589220-mitsubishi-outlander-2-4-awd-sheytsariya',
-        'https://www.mobile.bg/obiava-11759077895164151-toyota-corolla'
-    ]
+    # Test with 2 active URLs dynamically resolved
+    test_urls = get_active_test_urls(2)
     
     success_count = 0
     

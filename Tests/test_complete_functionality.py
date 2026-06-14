@@ -12,6 +12,7 @@ from modules.extractors import extract_car_info_mobile
 from modules.web_scraper import get_all_listing_links
 from modules.config_manager import load_env_config
 from modules.url_builder import build_mobilebg_search_url
+from Tests.test_helper import get_active_test_urls
 
 
 def test_complete_functionality():
@@ -58,10 +59,7 @@ def test_complete_functionality():
     # Test 3: Data Extraction
     print('\n📊 TEST 3: Data Extraction')
     print('-' * 40)
-    test_urls = [
-        'https://www.mobile.bg/obiava-21748341999589220-mitsubishi-outlander-2-4-awd-sheytsariya',
-        'https://www.mobile.bg/obiava-11759077895164151-toyota-corolla'
-    ]
+    test_urls = get_active_test_urls(2)
     
     extraction_success = 0
     for i, url in enumerate(test_urls, 1):

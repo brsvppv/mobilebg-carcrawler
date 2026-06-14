@@ -9,14 +9,16 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from modules.extractors import extract_car_info_mobile
+from Tests.test_helper import get_active_test_urls
 
 
 def test_single_car_extraction():
     """Test extracting data from a single car listing"""
     print('=== TESTING SINGLE CAR PRICE EXTRACTION ===')
     
-    # Test with the Toyota Corolla listing
-    url = 'https://www.mobile.bg/obiava-11759077895164151-toyota-corolla'
+    # Test with a dynamically resolved active listing
+    urls = get_active_test_urls(1)
+    url = urls[0]
     print(f'Testing URL: {url}')
     
     car_data = extract_car_info_mobile(url)

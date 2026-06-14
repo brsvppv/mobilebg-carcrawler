@@ -9,6 +9,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from openpyxl import load_workbook
+from modules.config_manager import load_env_config, get_output_config
 
 
 def test_excel_structure():
@@ -16,9 +17,12 @@ def test_excel_structure():
     print('📊 EXCEL STRUCTURE VERIFICATION TEST')
     print('=' * 50)
     
-    excel_path = 'docs/car-data.xlsx'
+    load_env_config()
+    config = get_output_config()
+    excel_path = config.get('excel_path', 'docs/car-data.xlsx')
+    
     if not os.path.exists(excel_path):
-        print('❌ Excel file not found!')
+        print(f'❌ Excel file not found at {excel_path}!')
         return False
     
     try:
