@@ -59,7 +59,7 @@ def test_complete_crawler_flow():
             car_info = extract_car_info_mobile(url, timeout=10)
             if car_info and car_info.get('Brand'):
                 cars_data.append(car_info)
-                print(f'    ✅ {car_info.get("Brand")} {car_info.get("Model")} - EUR: {car_info.get("Price_EUR")} BGN: {car_info.get("Price_BGN")}')
+                print(f'    ✅ {car_info.get("Brand")} {car_info.get("Model")} - EUR: {car_info.get("Price_EUR")}')
             else:
                 print(f'    ⚠️ No data extracted from {url}')
         except Exception as e:
@@ -91,7 +91,7 @@ def test_complete_crawler_flow():
     
     # Check if we have the expected columns
     headers = [ws.cell(row=1, column=col).value for col in range(1, ws.max_column + 1)]
-    required_headers = ['Brand', 'Model', 'Production Date', 'Price_EUR', 'Price_BGN']
+    required_headers = ['Brand', 'Model', 'Production Date', 'Price_EUR']
     headers_ok = all(header in headers for header in required_headers)
     
     if headers_ok:
@@ -106,9 +106,8 @@ def test_complete_crawler_flow():
     if ws.max_row > 1:  # Has data
         for row in range(2, min(4, ws.max_row + 1)):  # Check first few rows
             price_eur = ws.cell(row=row, column=4).value  # Price_EUR (column 4)
-            price_bgn = ws.cell(row=row, column=5).value  # Price_BGN (column 5)
             
-            if not isinstance(price_eur, (int, float)) or not isinstance(price_bgn, (int, float)):
+            if not isinstance(price_eur, (int, float)):
                 price_data_ok = False
                 break
     
@@ -173,7 +172,7 @@ def performance_summary():
             print(f'  🚗 Total cars processed: {total_cars}')
             print(f'  📁 Excel file: docs/car-data.xlsx')
             print(f'  📋 Sheet: {wb.sheetnames[0]}')
-            print(f'  📈 Columns: {ws.max_column} (including Price_EUR and Price_BGN)')
+            print(f'  📈 Columns: {ws.max_column} (including Price_EUR)')
         else:
             print('📊 No recent crawl data available')
             

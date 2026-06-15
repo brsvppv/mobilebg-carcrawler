@@ -18,10 +18,12 @@ def run_test_script(script_path, script_name):
         # Change to project root directory
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
-        # Run the test script
+        # Run the test script with project root in PYTHONPATH
+        env = dict(os.environ)
+        env['PYTHONPATH'] = project_root
         result = subprocess.run([
             sys.executable, script_path
-        ], cwd=project_root, capture_output=False, text=True)
+        ], cwd=project_root, env=env, capture_output=False, text=True)
         
         if result.returncode == 0:
             print(f'✅ {script_name} PASSED')

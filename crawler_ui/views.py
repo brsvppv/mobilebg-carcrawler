@@ -3,6 +3,7 @@ import math
 from pathlib import Path
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, FileResponse
+from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Avg, Count, Min, Max, Q
 from django.core.paginator import Paginator
@@ -60,7 +61,6 @@ def dashboard_view(request):
     # Core stats
     total_listings = CarListing.objects.count()
     total_sessions = CrawlSession.objects.count()
-    avg_price_bgn = CarListing.objects.filter(price_bgn__isnull=False).aggregate(Avg('price_bgn'))['price_bgn__avg'] or 0
     avg_price_eur = CarListing.objects.filter(price_eur__isnull=False).aggregate(Avg('price_eur'))['price_eur__avg'] or 0
     
     # Top brands
@@ -75,7 +75,6 @@ def dashboard_view(request):
     context = {
         'total_listings': total_listings,
         'total_sessions': total_sessions,
-        'avg_price_bgn': round(avg_price_bgn),
         'avg_price_eur': round(avg_price_eur),
         'top_brands': top_brands,
         'location_data': location_data,
@@ -89,9 +88,30 @@ def crawler_view(request):
     presets = SearchPreset.objects.all()
     sessions = CrawlSession.objects.order_by('-start_time')[:10]
     
-    # Find any running session
+    # Check if we should automatically run a preset
+    run_preset_id = request.GET.get('run_preset')
     running_session = CrawlSession.objects.filter(status='running').first()
     
+    if run_preset_id:
+        if not running_session:
+            try:
+                preset = SearchPreset.objects.get(id=run_preset_id)
+                # Create session and trigger crawl
+                running_session = CrawlSession.objects.create(
+                    status='running',
+                    search_description=f"Preset: {preset.name}"
+                )
+                start_crawl_in_background(
+                    running_session.id, preset.brand, preset.model, preset.vehicle_type, preset.fuel_type,
+                    preset.min_price, preset.max_price, preset.min_power, preset.max_power, preset.max_pages, preset.delay
+                )
+                # Re-fetch sessions list to include the newly started session
+                sessions = CrawlSession.objects.order_by('-start_time')[:10]
+            except SearchPreset.DoesNotExist:
+                pass
+        else:
+            messages.warning(request, "A crawling session is already running! Please wait for it to finish or stop it first.")
+            
     context = {
         'presets': presets,
         'sessions': sessions,
@@ -209,9 +229,9 @@ def results_view(request):
     if transmission:
         listings = listings.filter(transmission=transmission)
     if min_price:
-        listings = listings.filter(price_bgn__gte=min_price)
+        listings = listings.filter(price_eur__gte=min_price)
     if max_price:
-        listings = listings.filter(price_bgn__lte=max_price)
+        listings = listings.filter(price_eur__lte=max_price)
         
     # Get distinct brands, fuels, transmissions for filtering options dynamically
     all_brands = CarListing.objects.filter(brand__isnull=False).exclude(brand='').values_list('brand', flat=True).distinct().order_by('brand')
@@ -253,9 +273,26 @@ def delete_listing(request, listing_id):
 
 
 def export_session_excel(request, session_id):
+    # Ensure session_id is a UUID object (or handle string conversions)
+    from uuid import UUID
+    if isinstance(session_id, str):
+        try:
+            session_id = UUID(session_id)
+        except ValueError:
+            pass
+            
     session = get_object_or_404(CrawlSession, id=session_id)
+    
+    # Construct a descriptive user-facing download filename based on search description
+    clean_desc = "".join(c for c in session.search_description if c.isalnum() or c in (' ', '-', '_')).strip()
+    clean_desc = clean_desc.replace(' ', '_').replace('-', '_').lower()
+    download_filename = f"export_{clean_desc}_{session_id.hex[:6]}.xlsx" if clean_desc else f"export_{session_id.hex[:6]}.xlsx"
+    
     if session.excel_file_path and os.path.exists(session.excel_file_path):
-        return FileResponse(open(session.excel_file_path, 'rb'), as_attachment=True, filename=os.path.basename(session.excel_file_path))
+        response = FileResponse(open(session.excel_file_path, 'rb'), as_attachment=True, filename=download_filename)
+        response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        response['Content-Disposition'] = f'attachment; filename="{download_filename}"'
+        return response
     else:
         # Generate on the fly
         listings = session.listings.all()
@@ -269,7 +306,6 @@ def export_session_excel(request, session_id):
                 'Model': car.model,
                 'Production Date': car.production_date,
                 'Price_EUR': car.price_eur or '',
-                'Price_BGN': car.price_bgn or '',
                 'Engine': car.engine or '',
                 'Fuel Type': car.fuel_type or '',
                 'Transmission': car.transmission or '',
@@ -288,9 +324,12 @@ def export_session_excel(request, session_id):
         session.excel_file_path = filename
         session.save(update_fields=['excel_file_path'])
         
-        return FileResponse(open(filename, 'rb'), as_attachment=True, filename=os.path.basename(filename))
-
-
+        response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=download_filename)
+        response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        response['Content-Disposition'] = f'attachment; filename="{download_filename}"'
+        return response
+ 
+ 
 def export_all_excel(request):
     listings = CarListing.objects.all()
     if not listings:
@@ -303,7 +342,6 @@ def export_all_excel(request):
             'Model': car.model,
             'Production Date': car.production_date,
             'Price_EUR': car.price_eur or '',
-            'Price_BGN': car.price_bgn or '',
             'Engine': car.engine or '',
             'Fuel Type': car.fuel_type or '',
             'Transmission': car.transmission or '',
@@ -320,7 +358,11 @@ def export_all_excel(request):
     os.makedirs("docs", exist_ok=True)
     excel_utils.export_to_excel(cars_data, filename, "All-Scraped-Cars")
     
-    return FileResponse(open(filename, 'rb'), as_attachment=True, filename="all-cars.xlsx")
+    download_filename = "all_cars_export.xlsx"
+    response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=download_filename)
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response['Content-Disposition'] = f'attachment; filename="{download_filename}"'
+    return response
 
 
 def presets_view(request):

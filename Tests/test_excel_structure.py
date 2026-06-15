@@ -43,7 +43,7 @@ def test_excel_structure():
         # Verify headers
         headers = [ws.cell(row=1, column=col).value for col in range(1, ws.max_column + 1)]
         expected_headers = [
-            'Brand', 'Model', 'Production Date', 'Price_EUR', 'Price_BGN', 
+            'Brand', 'Model', 'Production Date', 'Price_EUR', 
             'Engine', 'Fuel Type', 'Transmission', 'Mileage', 'Color', 
             'Location', 'Phone', 'Link', 'Описание', 'Car Extras'
         ]
@@ -57,11 +57,11 @@ def test_excel_structure():
             if not match:
                 headers_correct = False
         
-        # Verify we have exactly 15 columns (optimized structure)
-        if ws.max_column == 15:
+        # Verify we have exactly 14 columns (optimized EUR-only structure)
+        if ws.max_column == 14:
             print(f'\n✅ Column count correct: {ws.max_column} columns')
         else:
-            print(f'\n❌ Column count incorrect: Expected 15, got {ws.max_column}')
+            print(f'\n❌ Column count incorrect: Expected 14, got {ws.max_column}')
             headers_correct = False
         
         # Sample data verification
@@ -74,17 +74,15 @@ def test_excel_structure():
             model = ws.cell(row=row, column=2).value
             prod_date = ws.cell(row=row, column=3).value
             price_eur = ws.cell(row=row, column=4).value
-            price_bgn = ws.cell(row=row, column=5).value
-            location = ws.cell(row=row, column=11).value
+            location = ws.cell(row=row, column=10).value
             
             print(f'\n  Car {row-1}: {brand} {model}')
             print(f'    📅 Production Date: "{prod_date}"')
             print(f'    💰 EUR: {price_eur} ({type(price_eur).__name__})')
-            print(f'    💰 BGN: {price_bgn} ({type(price_bgn).__name__})')
             print(f'    📍 Location: {location}')
             
             # Verify data types
-            if isinstance(price_eur, (int, float)) and isinstance(price_bgn, (int, float)):
+            if isinstance(price_eur, (int, float)):
                 print('    ✅ Price data types correct')
             else:
                 print('    ❌ Price data types incorrect')

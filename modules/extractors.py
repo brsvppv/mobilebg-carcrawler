@@ -98,32 +98,33 @@ def extract_car_info_mobile(url, timeout=10, logger=None):
             price_clean = re.sub(r'История.*', '', price_text).strip()
             car_info['Price'] = price_clean
             
-            # Extract separate Euro and BGN prices
+            # Extract separate Euro and BGN prices (BGN converted to EUR using fixed 1.95583 peg)
             # Look for Euro price (format: "2 964.98 €")
             euro_match = re.search(r'([\d\.]+)\s*€', price_text.replace(' ', ''))
-            if euro_match:
-                euro_price = euro_match.group(1)
-                try:
-                    car_info['Price_EUR'] = float(euro_price)
-                except ValueError:
-                    car_info['Price_EUR'] = ''
-            
-            # Look for BGN price (format: "5 799 лв." or containing decimal: "38 136.73 лв.")
             bgn_match = re.search(r'([\d\.]+)\s*лв', price_text.replace(' ', ''))
-            if bgn_match:
-                bgn_price = bgn_match.group(1)
-                try:
-                    # Parse as float to handle decimals, then round to nearest integer
-                    car_info['Price_BGN'] = int(round(float(bgn_price)))
-                except ValueError:
-                    car_info['Price_BGN'] = ''
             
-            # Keep the old price_numeric for compatibility
-            if bgn_match:
+            price_eur_val = None
+            if euro_match:
                 try:
-                    car_info['price_numeric'] = int(round(float(bgn_match.group(1))))
+                    price_eur_val = float(euro_match.group(1))
                 except ValueError:
                     pass
+            elif bgn_match:
+                try:
+                    # Convert BGN to EUR using the fixed peg rate 1.95583
+                    price_eur_val = round(float(bgn_match.group(1)) / 1.95583, 2)
+                except ValueError:
+                    pass
+            
+            if price_eur_val is not None:
+                car_info['Price_EUR'] = price_eur_val
+                car_info['price_numeric'] = int(round(price_eur_val))
+            else:
+                car_info['Price_EUR'] = ''
+                car_info['price_numeric'] = ''
+                
+            # Omit BGN price since Lev is no longer supported
+            car_info['Price_BGN'] = ''
         
         # Extract additional specifications from mpLabel elements
         labels = soup.find_all('div', class_='mpLabel')

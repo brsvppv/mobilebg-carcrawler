@@ -10,7 +10,7 @@
             <p>Browse, filter, and export extracted vehicle offers</p>
         </div>
         <div>
-            <a href="{% url 'export_all' %}" class="btn btn-primary">💾 Export All to Excel</a>
+            <a href="{% url 'export_all' %}" class="btn btn-primary" download="all-cars-export.xlsx">💾 Export All to Excel</a>
         </div>
     </div>
 </div>
@@ -54,8 +54,8 @@
                 {% endfor %}
             </select>
             
-            <input type="number" id="min-price" name="min_price" placeholder="Min BGN" style="width: 110px;" value="{{ min_price }}">
-            <input type="number" id="max-price" name="max_price" placeholder="Max BGN" style="width: 110px;" value="{{ max_price }}">
+            <input type="number" id="min-price" name="min_price" placeholder="Min EUR" style="width: 110px;" value="{{ min_price }}">
+            <input type="number" id="max-price" name="max_price" placeholder="Max EUR" style="width: 110px;" value="{{ max_price }}">
         </div>
     </form>
 </div>

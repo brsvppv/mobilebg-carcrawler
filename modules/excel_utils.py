@@ -168,7 +168,7 @@ def export_to_excel(cars_data, excel_path=None, sheet_name=None):
     
     # Define standard headers for car data with separate price columns only
     headers = [
-        'Brand', 'Model', 'Production Date', 'Price_EUR', 'Price_BGN', 'Engine', 'Fuel Type', 
+        'Brand', 'Model', 'Production Date', 'Price_EUR', 'Engine', 'Fuel Type', 
         'Transmission', 'Mileage', 'Color', 'Location', 'Phone', 
         'Link', 'Описание', 'Car Extras'
     ]

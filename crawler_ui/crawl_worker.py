@@ -100,6 +100,12 @@ def run_crawl_session(session_id, brand, model, vehicle_type, fuel_type, min_pri
                     price_bgn = car_info.get('Price_BGN')
                     price_eur = car_info.get('Price_EUR')
                     
+                    if not price_eur and price_bgn:
+                        try:
+                            price_eur = round(float(price_bgn) / 1.95583, 2)
+                        except (ValueError, TypeError):
+                            pass
+                    
                     listing, created = CarListing.objects.update_or_create(
                         link=link,
                         defaults={
@@ -107,8 +113,8 @@ def run_crawl_session(session_id, brand, model, vehicle_type, fuel_type, min_pri
                             'brand': car_info.get('Brand', brand),
                             'model': car_info.get('Model', model),
                             'production_date': car_info.get('Production Date'),
-                            'price_eur': price_eur if price_eur != '' else None,
-                            'price_bgn': price_bgn if price_bgn != '' else None,
+                            'price_eur': price_eur if price_eur not in ('', None) else None,
+                            'price_bgn': None,
                             'engine': car_info.get('Engine'),
                             'fuel_type': car_info.get('Fuel Type', fuel_type),
                             'transmission': car_info.get('Transmission'),

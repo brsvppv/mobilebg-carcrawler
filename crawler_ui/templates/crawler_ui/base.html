@@ -160,6 +160,15 @@
             }, 4000);
         }
         
+        // Render Django messages as toasts
+        {% if messages %}
+            window.addEventListener('DOMContentLoaded', () => {
+                {% for message in messages %}
+                    showToast("{{ message|escapejs }}", "{{ message.tags|default:'success' }}");
+                {% endfor %}
+            });
+        {% endif %}
+        
         // ── HTMX Error Handling ──
         document.body.addEventListener('htmx:responseError', function(evt) {
             const status = evt.detail.xhr.status;

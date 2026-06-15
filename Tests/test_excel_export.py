@@ -22,7 +22,6 @@ def create_test_data():
             'Model': 'Corolla',
             'Production Date': 'юни 2007',
             'Price_EUR': 2964.98,
-            'Price_BGN': 5799,
             'Engine': '124 к.с.',
             'Fuel Type': 'Бензинов',
             'Transmission': 'Ръчна',
@@ -39,7 +38,6 @@ def create_test_data():
             'Model': 'X3',
             'Production Date': 'януари 2015',
             'Price_EUR': 15000.00,
-            'Price_BGN': 29300,
             'Engine': '190 к.с.',
             'Fuel Type': 'Дизелов',
             'Transmission': 'Автоматична',
@@ -56,7 +54,6 @@ def create_test_data():
             'Model': 'A4',
             'Production Date': 'май 2018',
             'Price_EUR': 22500.50,
-            'Price_BGN': 44000,
             'Engine': '150 к.с.',
             'Fuel Type': 'Бензинов',
             'Transmission': 'Ръчна',
@@ -75,14 +72,18 @@ def test_excel_auto_creation():
     """Test Excel file auto-creation from .env config"""
     print('=== TESTING EXCEL AUTO-CREATION ===')
     
-    # Clean up any existing test files
-    if os.path.exists('docs'):
-        shutil.rmtree('docs')
-        print('🗑️ Removed existing docs directory')
-    
     # Load configuration
     load_env_config()
     config = get_output_config()
+    
+    # Clean up any existing test files
+    excel_path = config.get('excel_path', 'docs/car-data.xlsx')
+    if os.path.exists(excel_path):
+        try:
+            os.remove(excel_path)
+            print(f'🗑️ Removed existing test file: {excel_path}')
+        except Exception as e:
+            print(f'⚠️ Could not remove test file: {e}')
     
     print(f'\n📋 Configuration loaded:')
     for key, value in config.items():
@@ -134,7 +135,7 @@ def test_excel_structure(excel_path='docs/car-data.xlsx'):
         # Get and verify headers
         headers = [ws.cell(row=1, column=col).value for col in range(1, ws.max_column + 1)]
         expected_headers = [
-            'Brand', 'Model', 'Production Date', 'Price_EUR', 'Price_BGN', 'Engine', 'Fuel Type', 
+            'Brand', 'Model', 'Production Date', 'Price_EUR', 'Engine', 'Fuel Type', 
             'Transmission', 'Mileage', 'Color', 'Location', 'Phone', 
             'Link', 'Описание', 'Car Extras'
         ]
@@ -157,15 +158,13 @@ def test_excel_structure(excel_path='docs/car-data.xlsx'):
             model = ws.cell(row=row, column=2).value
             production_date = ws.cell(row=row, column=3).value  
             price_eur = ws.cell(row=row, column=4).value  
-            price_bgn = ws.cell(row=row, column=5).value  
             
             print(f'\n  Car {row-1}: {brand} {model}')
             print(f'    Production Date: {production_date}')
             print(f'    EUR: {price_eur} (type: {type(price_eur).__name__})')
-            print(f'    BGN: {price_bgn} (type: {type(price_bgn).__name__})')
             
             # Verify price types
-            if not isinstance(price_eur, (int, float)) or not isinstance(price_bgn, (int, float)):
+            if not isinstance(price_eur, (int, float)):
                 price_data_ok = False
                 print(f'    ❌ Price types incorrect')
             else:

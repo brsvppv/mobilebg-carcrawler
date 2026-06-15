@@ -177,11 +177,10 @@ def test_quick_extraction_sample():
                 model = car_info.get('Model', 'Unknown')
                 prod_date = car_info.get('Production Date', 'N/A')
                 price_eur = car_info.get('Price_EUR', 0)
-                price_bgn = car_info.get('Price_BGN', 0)
                 
-                print(f'  ✅ {brand} {model}')
+                print(f'  `{brand} {model}`')
                 print(f'    📅 Date: {prod_date}')
-                print(f'    💰 Price: {price_eur}€ / {price_bgn}лв')
+                print(f'    💰 Price: {price_eur}€')
                 
                 success_count += 1
             else:

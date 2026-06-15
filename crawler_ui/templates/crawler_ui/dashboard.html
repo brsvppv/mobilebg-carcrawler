@@ -28,20 +28,6 @@
     </div>
     
     <div class="glass-card metric-card">
-        <div class="metric-icon-box">💵</div>
-        <div class="metric-info">
-            <h3>Avg Price (BGN)</h3>
-            <div class="metric-value">
-                {% if avg_price_bgn %}
-                    {{ avg_price_bgn|format_avg_price }} лв.
-                {% else %}
-                    N/A
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    
-    <div class="glass-card metric-card">
         <div class="metric-icon-box">💶</div>
         <div class="metric-info">
             <h3>Avg Price (EUR)</h3>
@@ -88,7 +74,7 @@
                             <span style="font-size: 0.72rem; color: var(--text-muted);">Cars Found</span>
                         </div>
                         {% if session.excel_file_path %}
-                            <a href="{% url 'export_session' session.id %}" class="btn btn-secondary btn-xs" title="Download Excel">💾</a>
+                            <a href="{% url 'export_session' session.id %}" class="btn btn-secondary btn-xs" title="Download Excel" download="export-{{ session.search_description|slugify }}.xlsx">💾</a>
                         {% endif %}
                     </div>
                 </div>
