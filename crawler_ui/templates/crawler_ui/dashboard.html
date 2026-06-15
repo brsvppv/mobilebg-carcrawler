@@ -1,4 +1,5 @@
 {% extends 'crawler_ui/base.html' %}
+{% load crawler_filters %}
 
 {% block title %}Dashboard - AutoGetCars{% endblock %}
 
@@ -14,7 +15,7 @@
         <div class="metric-icon-box">🚗</div>
         <div class="metric-info">
             <h3>Total Cars Scraped</h3>
-            <div class="metric-value">{{ total_listings }}</div>
+            <div class="metric-value">{{ total_listings|format_number }}</div>
         </div>
     </div>
     
@@ -32,7 +33,7 @@
             <h3>Avg Price (BGN)</h3>
             <div class="metric-value">
                 {% if avg_price_bgn %}
-                    {{ avg_price_bgn|filesizeformat|slice:":-2" }} BGN
+                    {{ avg_price_bgn|format_avg_price }} лв.
                 {% else %}
                     N/A
                 {% endif %}
@@ -46,7 +47,7 @@
             <h3>Avg Price (EUR)</h3>
             <div class="metric-value">
                 {% if avg_price_eur %}
-                    {{ avg_price_eur|filesizeformat|slice:":-2" }} €
+                    {{ avg_price_eur|format_avg_price }} €
                 {% else %}
                     N/A
                 {% endif %}
@@ -60,23 +61,31 @@
     <div class="glass-card">
         <div class="panel-header">
             <h3>Recent Crawl Sessions</h3>
-            <a href="{% url 'crawler' %}" class="btn btn-secondary btn-sm">New Crawl</a>
+            <a href="{% url 'crawler' %}" class="btn btn-secondary btn-sm">⚡ New Crawl</a>
         </div>
         
         <div class="recent-list">
             {% for session in recent_sessions %}
                 <div class="session-item">
                     <div class="session-meta">
-                        <h4>{{ session.search_description }}</h4>
-                        <span>Started: {{ session.start_time|date:"Y-m-d H:i" }}</span>
+                        {% if session.success_count > 0 %}
+                            <h4><a href="{% url 'results' %}?session={{ session.id }}" style="color: inherit; text-decoration: underline; text-decoration-color: transparent; transition: text-decoration-color 0.2s;" onmouseover="this.style.textDecorationColor='currentColor'" onmouseout="this.style.textDecorationColor='transparent'">{{ session.search_description }}</a></h4>
+                        {% else %}
+                            <h4>{{ session.search_description }}</h4>
+                        {% endif %}
+                        <span>{{ session.start_time|date:"M d, Y • H:i" }}</span>
                     </div>
                     <div class="session-stats">
-                        <div>
-                            <span class="badge {{ session.status }}">{{ session.get_status_display }}</span>
-                        </div>
+                        <span class="badge {{ session.status }}">{{ session.get_status_display }}</span>
                         <div style="text-align: right;">
-                            <strong style="display:block; font-size: 1.1rem;">{{ session.success_count }}</strong>
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Cars Scraped</span>
+                            {% if session.success_count > 0 %}
+                                <a href="{% url 'results' %}?session={{ session.id }}" style="color: inherit; text-decoration: none;">
+                                    <strong style="display:block; font-size: 1.1rem; font-family: var(--font-heading);">{{ session.success_count }}</strong>
+                                </a>
+                            {% else %}
+                                <strong style="display:block; font-size: 1.1rem; font-family: var(--font-heading);">{{ session.success_count }}</strong>
+                            {% endif %}
+                            <span style="font-size: 0.72rem; color: var(--text-muted);">Cars Found</span>
                         </div>
                         {% if session.excel_file_path %}
                             <a href="{% url 'export_session' session.id %}" class="btn btn-secondary btn-xs" title="Download Excel">💾</a>
@@ -84,7 +93,12 @@
                     </div>
                 </div>
             {% empty %}
-                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No crawl sessions run yet. Go to 'Run Scraper' to begin.</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📡</div>
+                    <h4>No Crawl Sessions Yet</h4>
+                    <p>Start your first scraping session to see results here.</p>
+                    <a href="{% url 'crawler' %}" class="btn btn-primary btn-sm">🚀 Launch Scraper</a>
+                </div>
             {% endfor %}
         </div>
     </div>
@@ -100,15 +114,18 @@
                 <div class="dist-item">
                     <div class="dist-label">
                         <span>гр. {{ loc.location|title }}</span>
-                        <span>{{ loc.count }} cars</span>
+                        <span>{{ loc.count }}</span>
                     </div>
                     <div class="dist-bar-bg">
-                        <!-- Calculate percentage assuming max list size as denominator or 100 -->
                         <div class="dist-bar-fill" style="width: {% widthratio loc.count total_listings 100 %}%"></div>
                     </div>
                 </div>
             {% empty %}
-                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No locations data available.</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📍</div>
+                    <h4>No Data Available</h4>
+                    <p>Run a scraping session to see location distribution.</p>
+                </div>
             {% endfor %}
         </div>
     </div>
@@ -124,14 +141,18 @@
                 <div class="dist-item">
                     <div class="dist-label">
                         <span>{{ br.brand|title }}</span>
-                        <span>{{ br.count }} cars</span>
+                        <span>{{ br.count }}</span>
                     </div>
                     <div class="dist-bar-bg">
                         <div class="dist-bar-fill" style="width: {% widthratio br.count total_listings 100 %}%"></div>
                     </div>
                 </div>
             {% empty %}
-                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No brand data available.</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏷️</div>
+                    <h4>No Data Available</h4>
+                    <p>Run a scraping session to see brand distribution.</p>
+                </div>
             {% endfor %}
         </div>
     </div>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AutoGetCars – Premium car listing crawler platform for mobile.bg">
     <title>{% block title %}AutoGetCars - Premium Crawler Dashboard{% endblock %}</title>
     
     <!-- Fonts -->
@@ -20,9 +21,18 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">☰</button>
+    
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
     <div class="app-container">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="logo-container">
                 <span class="logo-icon">🚗</span>
                 <div class="logo-text">
@@ -65,7 +75,7 @@
                     <span class="status-indicator online"></span>
                     <span class="status-text">System Live</span>
                 </div>
-                <div class="footer-meta">v2.0 • Web Edition</div>
+                <div class="footer-meta">v3.0 • Web Edition</div>
             </div>
         </aside>
         
@@ -73,7 +83,7 @@
         <main class="main-content">
             <header class="top-header">
                 <div class="header-search">
-                    <!-- Space for search/filters if needed -->
+                    <!-- Space for breadcrumbs or search if needed -->
                 </div>
                 <div class="user-profile">
                     <div class="time-widget">
@@ -90,20 +100,90 @@
     </div>
     
     <script>
-        // Real-time clock widget
+        // ── Real-time Clock ──
         function updateTime() {
-            const timeSpan = document.getElementById('current-time');
-            if (timeSpan) {
-                const now = new Date();
-                timeSpan.textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+            const el = document.getElementById('current-time');
+            if (el) {
+                el.textContent = new Date().toLocaleTimeString([], {
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
             }
         }
         setInterval(updateTime, 1000);
         updateTime();
         
-        // HTMX CSRF Token Integration
+        // ── CSRF Token for HTMX ──
         document.body.addEventListener('htmx:configRequest', (event) => {
             event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+        
+        // ── Mobile Sidebar Toggle ──
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+            });
+        }
+        if (overlay) {
+            overlay.addEventListener('click', closeSidebar);
+        }
+        
+        // Close sidebar on nav link click (mobile)
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) closeSidebar();
+            });
+        });
+        
+        // ── Toast Notification System ──
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            
+            const icons = { success: '✅', error: '❌', warning: '⚠️' };
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<span>${icons[type] || ''}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 4000);
+        }
+        
+        // ── HTMX Error Handling ──
+        document.body.addEventListener('htmx:responseError', function(evt) {
+            const status = evt.detail.xhr.status;
+            if (status === 400) {
+                showToast(evt.detail.xhr.responseText || 'Bad request', 'error');
+            } else if (status >= 500) {
+                showToast('Server error. Please try again.', 'error');
+            } else {
+                showToast('Request failed. Please check your connection.', 'warning');
+            }
+        });
+        
+        document.body.addEventListener('htmx:sendError', function() {
+            showToast('Network error. Check your connection.', 'error');
+        });
+        
+        // Show success toast after successful HTMX delete
+        document.body.addEventListener('htmx:afterSwap', function(evt) {
+            if (evt.detail.requestConfig && evt.detail.requestConfig.verb === 'post') {
+                const path = evt.detail.requestConfig.path || '';
+                if (path.includes('/delete/')) {
+                    showToast('Item deleted successfully.', 'success');
+                }
+            }
         });
     </script>
     {% block extra_js %}{% endblock %}

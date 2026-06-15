@@ -177,6 +177,13 @@ def stop_crawl(request, session_id):
         session.status = 'stopped'
         session.end_time = timezone.now()
         session.save(update_fields=['status', 'end_time'])
+    
+    # For HTMX requests, use HX-Redirect to trigger a full page reload
+    # instead of injecting redirect response into the target div
+    if request.headers.get('HX-Request'):
+        response = HttpResponse(status=200)
+        response['HX-Redirect'] = request.build_absolute_uri('/crawl/')
+        return response
     return redirect('crawler')
 
 
@@ -187,24 +194,29 @@ def results_view(request):
     transmission = request.GET.get('transmission', '')
     min_price = request.GET.get('min_price', '')
     max_price = request.GET.get('max_price', '')
+    session_id = request.GET.get('session', '')
     
     listings = CarListing.objects.all().order_by('-created_at')
     
+    if session_id:
+        listings = listings.filter(session_id=session_id)
     if query:
         listings = listings.filter(Q(brand__icontains=query) | Q(model__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query))
     if brand:
         listings = listings.filter(brand__iexact=brand)
     if fuel_type:
-        listings = listings.filter(fuel_type__icontains=fuel_type)
+        listings = listings.filter(fuel_type=fuel_type)
     if transmission:
-        listings = listings.filter(transmission__icontains=transmission)
+        listings = listings.filter(transmission=transmission)
     if min_price:
         listings = listings.filter(price_bgn__gte=min_price)
     if max_price:
         listings = listings.filter(price_bgn__lte=max_price)
         
-    # Get distinct brands for filtering options
-    all_brands = CarListing.objects.values_list('brand', flat=True).distinct().order_by('brand')
+    # Get distinct brands, fuels, transmissions for filtering options dynamically
+    all_brands = CarListing.objects.filter(brand__isnull=False).exclude(brand='').values_list('brand', flat=True).distinct().order_by('brand')
+    all_fuels = CarListing.objects.filter(fuel_type__isnull=False).exclude(fuel_type='').values_list('fuel_type', flat=True).distinct().order_by('fuel_type')
+    all_transmissions = CarListing.objects.filter(transmission__isnull=False).exclude(transmission='').values_list('transmission', flat=True).distinct().order_by('transmission')
     
     paginator = Paginator(listings, 25)
     page_number = request.GET.get('page', 1)
@@ -213,12 +225,15 @@ def results_view(request):
     context = {
         'page_obj': page_obj,
         'all_brands': all_brands,
+        'all_fuels': all_fuels,
+        'all_transmissions': all_transmissions,
         'query': query,
         'brand': brand,
         'fuel_type': fuel_type,
         'transmission': transmission,
         'min_price': min_price,
         'max_price': max_price,
+        'session_id': session_id,
     }
     
     # If HTMX request, render only the table body and pagination
@@ -371,3 +386,26 @@ def delete_preset(request, preset_id):
     preset = get_object_or_404(SearchPreset, id=preset_id)
     preset.delete()
     return redirect('presets')
+
+
+def health_check(request):
+    """Simple health check endpoint for monitoring."""
+    try:
+        # Verify DB connectivity
+        listing_count = CarListing.objects.count()
+        session_count = CrawlSession.objects.count()
+        running_crawls = CrawlSession.objects.filter(status='running').count()
+        
+        return JsonResponse({
+            'status': 'healthy',
+            'db': 'connected',
+            'listings': listing_count,
+            'sessions': session_count,
+            'running_crawls': running_crawls,
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'unhealthy',
+            'error': str(e),
+        }, status=503)
+

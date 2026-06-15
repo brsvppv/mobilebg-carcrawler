@@ -100,27 +100,28 @@ def extract_car_info_mobile(url, timeout=10, logger=None):
             
             # Extract separate Euro and BGN prices
             # Look for Euro price (format: "2 964.98 €")
-            euro_match = re.search(r'([\d\s]+\.?\d*)\s*€', price_text.replace(' ', ''))
+            euro_match = re.search(r'([\d\.]+)\s*€', price_text.replace(' ', ''))
             if euro_match:
-                euro_price = euro_match.group(1).replace(' ', '')
+                euro_price = euro_match.group(1)
                 try:
                     car_info['Price_EUR'] = float(euro_price)
                 except ValueError:
                     car_info['Price_EUR'] = ''
             
-            # Look for BGN price (format: "5 799 лв.")
-            bgn_match = re.search(r'([\d\s]+)\s*лв', price_text.replace(' ', ''))
+            # Look for BGN price (format: "5 799 лв." or containing decimal: "38 136.73 лв.")
+            bgn_match = re.search(r'([\d\.]+)\s*лв', price_text.replace(' ', ''))
             if bgn_match:
-                bgn_price = bgn_match.group(1).replace(' ', '')
+                bgn_price = bgn_match.group(1)
                 try:
-                    car_info['Price_BGN'] = int(bgn_price)
+                    # Parse as float to handle decimals, then round to nearest integer
+                    car_info['Price_BGN'] = int(round(float(bgn_price)))
                 except ValueError:
                     car_info['Price_BGN'] = ''
             
             # Keep the old price_numeric for compatibility
             if bgn_match:
                 try:
-                    car_info['price_numeric'] = int(bgn_match.group(1).replace(' ', ''))
+                    car_info['price_numeric'] = int(round(float(bgn_match.group(1))))
                 except ValueError:
                     pass
         

@@ -18,4 +18,6 @@ urlpatterns = [
     path('presets/create/', views.create_preset, name='create_preset'),
     path('presets/edit/<int:preset_id>/', views.edit_preset, name='edit_preset'),
     path('presets/delete/<int:preset_id>/', views.delete_preset, name='delete_preset'),
+    
+    path('health/', views.health_check, name='health_check'),
 ]

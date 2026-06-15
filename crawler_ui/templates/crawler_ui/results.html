@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="page-title-block">
-    <div style="display:flex; justify-content: space-between; align-items: center;">
+    <div style="display:flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h2>Scraped Cars Database</h2>
             <p>Browse, filter, and export extracted vehicle offers</p>
@@ -16,48 +16,52 @@
 </div>
 
 <!-- Search and Filtering Panel -->
-<div class="glass-card" style="margin-bottom: 2rem; padding: 1.5rem;">
+<div class="glass-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
     <form hx-get="{% url 'results' %}" 
-          hx-trigger="keyup changed delay:300ms from:#search-input, change from:#brand-select, change from:#fuel-select, change from:#transmission-select, keyup changed delay:500ms from:#min-price, keyup changed delay:500ms from:#max-price" 
+          hx-trigger="keyup changed delay:400ms from:#search-input, change from:#brand-select, change from:#fuel-select, change from:#transmission-select, keyup changed delay:600ms from:#min-price, keyup changed delay:600ms from:#max-price" 
           hx-target="#results-table-container"
           hx-swap="innerHTML"
+          hx-indicator="#results-table-container"
           class="filter-bar">
+        {% if session_id %}
+            <input type="hidden" name="session" value="{{ session_id }}">
+        {% endif %}
           
         <div class="search-input-wrapper">
             <span class="search-icon">🔍</span>
             <input type="text" id="search-input" name="q" placeholder="Search by brand, model, description..." value="{{ query }}">
         </div>
         
-        <div style="display:flex; gap: 1rem; flex-wrap: wrap;">
-            <select name="brand" id="brand-select">
+        <div style="display:flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+            <select name="brand" id="brand-select" style="min-width: 140px;">
                 <option value="">All Brands</option>
                 {% for b in all_brands %}
                     <option value="{{ b }}" {% if brand == b %}selected{% endif %}>{{ b|title }}</option>
                 {% endfor %}
             </select>
             
-            <select name="fuel_type" id="fuel-select">
+            <select name="fuel_type" id="fuel-select" style="min-width: 120px;">
                 <option value="">All Fuels</option>
-                <option value="dizel" {% if fuel_type == 'dizel' %}selected{% endif %}>Diesel</option>
-                <option value="benzin" {% if fuel_type == 'benzin' %}selected{% endif %}>Petrol</option>
-                <option value="hibrid" {% if fuel_type == 'hibrid' %}selected{% endif %}>Hybrid</option>
-                <option value="elek" {% if fuel_type == 'elek' %}selected{% endif %}>Electric</option>
+                {% for f in all_fuels %}
+                    <option value="{{ f }}" {% if fuel_type == f %}selected{% endif %}>{{ f|title }}</option>
+                {% endfor %}
             </select>
             
-            <select name="transmission" id="transmission-select">
+            <select name="transmission" id="transmission-select" style="min-width: 150px;">
                 <option value="">All Transmissions</option>
-                <option value="автоматик" {% if transmission == 'автоматик' %}selected{% endif %}>Automatic</option>
-                <option value="ръчна" {% if transmission == 'ръчна' %}selected{% endif %}>Manual</option>
+                {% for t in all_transmissions %}
+                    <option value="{{ t }}" {% if transmission == t %}selected{% endif %}>{{ t|title }}</option>
+                {% endfor %}
             </select>
             
-            <input type="number" id="min-price" name="min_price" placeholder="Min BGN" style="width: 120px;" value="{{ min_price }}">
-            <input type="number" id="max-price" name="max_price" placeholder="Max BGN" style="width: 120px;" value="{{ max_price }}">
+            <input type="number" id="min-price" name="min_price" placeholder="Min BGN" style="width: 110px;" value="{{ min_price }}">
+            <input type="number" id="max-price" name="max_price" placeholder="Max BGN" style="width: 110px;" value="{{ max_price }}">
         </div>
     </form>
 </div>
 
-<!-- Table Container -->
-<div id="results-table-container">
+<!-- Table Container with loading indicator -->
+<div id="results-table-container" class="loading-overlay">
     {% include 'crawler_ui/partials/results_table.html' %}
 </div>
 {% endblock %}

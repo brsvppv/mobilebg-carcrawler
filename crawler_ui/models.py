@@ -38,28 +38,40 @@ class CrawlSession(models.Model):
     logs = models.TextField(blank=True, default='')
     excel_file_path = models.CharField(max_length=500, blank=True, null=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['status'], name='idx_session_status'),
+            models.Index(fields=['-start_time'], name='idx_session_start'),
+        ]
+
     def __str__(self):
         return f"{self.search_description} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
 
 
 class CarListing(models.Model):
     session = models.ForeignKey(CrawlSession, on_delete=models.SET_NULL, null=True, blank=True, related_name='listings')
-    brand = models.CharField(max_length=50)
+    brand = models.CharField(max_length=50, db_index=True)
     model = models.CharField(max_length=100)
     production_date = models.CharField(max_length=50, blank=True, null=True)
     price_eur = models.FloatField(null=True, blank=True)
-    price_bgn = models.IntegerField(null=True, blank=True)
+    price_bgn = models.IntegerField(null=True, blank=True, db_index=True)
     engine = models.CharField(max_length=100, blank=True, null=True)
-    fuel_type = models.CharField(max_length=50, blank=True, null=True)
+    fuel_type = models.CharField(max_length=50, blank=True, null=True, db_index=True)
     transmission = models.CharField(max_length=50, blank=True, null=True)
     mileage = models.CharField(max_length=50, blank=True, null=True)
     color = models.CharField(max_length=50, blank=True, null=True)
-    location = models.CharField(max_length=100, blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True, db_index=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     link = models.URLField(max_length=500, unique=True)
     description = models.TextField(blank=True, null=True)
     extras = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-created_at'], name='idx_listing_created'),
+            models.Index(fields=['brand', 'price_bgn'], name='idx_listing_brand_price'),
+        ]
 
     def __str__(self):
         return f"{self.brand} {self.model} - {self.price_bgn or self.price_eur or 'N/A'}"

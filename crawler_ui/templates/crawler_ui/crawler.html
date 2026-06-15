@@ -17,7 +17,7 @@
         {% else %}
             <!-- Scraper Configuration Form -->
             <div class="panel-header">
-                <h3>Scraper Configuration</h3>
+                <h3>⚙️ Scraper Configuration</h3>
             </div>
             
             <form hx-post="{% url 'start_crawl' %}" hx-target="#crawler-control-panel" hx-swap="innerHTML" class="crawl-form">
@@ -51,9 +51,9 @@
                         <label for="fuel_type">Fuel Type</label>
                         <select id="fuel_type" name="fuel_type">
                             <option value="dizelov">Diesel (dizelov)</option>
-                            <option value="benzinov">Gasoline / Petrol (benzinov)</option>
-                            <option value="hibrid">Hybrid (hibrid)</option>
-                            <option value="elektricheski">Electric (elektricheski)</option>
+                            <option value="benzinov">Gasoline / Petrol</option>
+                            <option value="hibrid">Hybrid</option>
+                            <option value="elektricheski">Electric</option>
                         </select>
                     </div>
                     
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 
-                <div style="display:flex; justify-content: flex-end; gap: 1rem;">
+                <div style="display:flex; justify-content: flex-end; gap: 1rem; padding-top: 0.5rem;">
                     <button type="submit" class="btn btn-primary">🚀 Launch Scraper</button>
                 </div>
             </form>
@@ -98,26 +98,31 @@
     <!-- Right Column: Quick Presets -->
     <div class="glass-card">
         <div class="panel-header">
-            <h3>Launch from Preset</h3>
+            <h3>⚡ Quick Launch</h3>
         </div>
         
-        <div class="recent-list" style="max-height: 500px; overflow-y: auto;">
+        <div class="recent-list" style="max-height: 520px; overflow-y: auto;">
             {% for preset in presets %}
-                <div class="session-item" style="padding: 1rem;">
+                <div class="session-item">
                     <div class="session-meta">
-                        <h4 style="font-size: 0.95rem;">{{ preset.name }}</h4>
-                        <span style="font-size: 0.75rem;">{{ preset.brand|title }} {{ preset.model|title }} • {{ preset.fuel_type }}</span>
+                        <h4>{{ preset.name }}</h4>
+                        <span>{{ preset.brand|title }} {{ preset.model|title }} • {{ preset.fuel_type }}</span>
                     </div>
                     <div>
                         <form hx-post="{% url 'start_crawl' %}" hx-target="#crawler-control-panel" hx-swap="innerHTML">
                             {% csrf_token %}
                             <input type="hidden" name="preset_id" value="{{ preset.id }}">
-                            <button type="submit" class="btn btn-secondary btn-sm" {% if running_session %}disabled{% endif %}>Run</button>
+                            <button type="submit" class="btn btn-secondary btn-sm" {% if running_session %}disabled{% endif %}>▶ Run</button>
                         </form>
                     </div>
                 </div>
             {% empty %}
-                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No presets defined yet.</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚙️</div>
+                    <h4>No Presets Defined</h4>
+                    <p>Create search presets for one-click scraping.</p>
+                    <a href="{% url 'create_preset' %}" class="btn btn-secondary btn-sm">➕ Create Preset</a>
+                </div>
             {% endfor %}
         </div>
     </div>

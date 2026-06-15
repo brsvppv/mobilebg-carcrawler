@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="page-title-block">
-    <div style="display:flex; justify-content: space-between; align-items: center;">
+    <div style="display:flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h2>Search Presets Manager</h2>
             <p>Define templates for common searches to run with a single click</p>
@@ -20,7 +20,7 @@
         <div class="glass-card preset-card">
             <div>
                 <div class="preset-header">
-                    <span class="preset-icon">⚙️</span>
+                    <span class="preset-icon">🔧</span>
                     <div class="preset-title">
                         <h4>{{ preset.name }}</h4>
                         <span>{{ preset.brand|title }} {{ preset.model|title }}</span>
@@ -38,33 +38,37 @@
                     </div>
                     <div class="preset-meta-row">
                         <span>Price Range</span>
-                        <span>{{ preset.min_price }} - {{ preset.max_price }} BGN</span>
+                        <span>{{ preset.min_price }} – {{ preset.max_price }} BGN</span>
                     </div>
                     <div class="preset-meta-row">
                         <span>Engine Power</span>
-                        <span>{{ preset.min_power }} - {{ preset.max_power }} HP</span>
+                        <span>{{ preset.min_power }} – {{ preset.max_power }} HP</span>
                     </div>
                     <div class="preset-meta-row">
-                        <span>Crawl Delay / Max Pages</span>
+                        <span>Delay / Pages</span>
                         <span>{{ preset.delay }}s / {{ preset.max_pages }} p.</span>
                     </div>
                 </div>
             </div>
             
             <div class="preset-actions">
-                <a href="{% url 'crawler' %}" class="btn btn-primary btn-sm" style="flex-grow: 1;">Run Scraper</a>
-                <a href="{% url 'edit_preset' preset.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="{% url 'crawler' %}" class="btn btn-primary btn-sm" style="flex-grow: 1;">▶ Run Scraper</a>
+                <a href="{% url 'edit_preset' preset.id %}" class="btn btn-secondary btn-sm">✏️ Edit</a>
                 
                 <form action="{% url 'delete_preset' preset.id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this preset?');">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
                 </form>
             </div>
         </div>
     {% empty %}
-        <div class="glass-card" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">No search presets created yet.</p>
-            <a href="{% url 'create_preset' %}" class="btn btn-primary">Create Your First Preset</a>
+        <div class="glass-card" style="grid-column: 1 / -1;">
+            <div class="empty-state">
+                <div class="empty-state-icon">⚙️</div>
+                <h4>No Search Presets Created</h4>
+                <p>Create your first preset to enable one-click scraping with predefined parameters.</p>
+                <a href="{% url 'create_preset' %}" class="btn btn-primary">➕ Create Your First Preset</a>
+            </div>
         </div>
     {% endfor %}
 </div>
