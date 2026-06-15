@@ -71,7 +71,7 @@
                 <a href="{% url 'results' %}?session={{ session.id }}" class="btn btn-accent" style="background: var(--accent-indigo); color: white;">🔍 View Scraped Cars ({{ session.success_count }})</a>
             {% endif %}
             {% if session.excel_file_path %}
-                <a href="{% url 'export_session' session.id %}" class="btn btn-primary" download="export-{{ session.search_description|slugify }}.xlsx">💾 Download Excel</a>
+                <a href="{% url 'export_session' session.id %}" class="btn btn-primary" download="export-{{ session.search_description|slugify }}.xlsx" target="_blank">💾 Download Excel</a>
             {% endif %}
             <a href="{% url 'crawler' %}" class="btn btn-secondary">🔄 Run New Crawl</a>
         {% endif %}
