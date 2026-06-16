@@ -47,6 +47,13 @@ class CrawlSession(models.Model):
     def __str__(self):
         return f"{self.search_description} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
 
+    @property
+    def download_filename(self):
+        from django.utils.text import slugify
+        clean_desc = slugify(self.search_description).replace('-', '_')
+        suffix = self.id.hex[:6]
+        return f"export_{clean_desc}_{suffix}.xlsx" if clean_desc else f"export_{suffix}.xlsx"
+
 
 class CarListing(models.Model):
     session = models.ForeignKey(CrawlSession, on_delete=models.SET_NULL, null=True, blank=True, related_name='listings')

@@ -11,8 +11,10 @@ urlpatterns = [
     
     path('results/', views.results_view, name='results'),
     path('results/delete/<int:listing_id>/', views.delete_listing, name='delete_listing'),
-    path('results/export/<uuid:session_id>/', views.export_session_excel, name='export_session'),
-    path('results/export-all/', views.export_all_excel, name='export_all'),
+    path('results/export/<uuid:session_id>/', views.export_session_excel, name='export_session_legacy'),
+    path('results/export/<uuid:session_id>/<str:filename>', views.export_session_excel, name='export_session'),
+    path('results/export-all/', views.export_all_excel, name='export_all_legacy'),
+    path('results/export-all.xlsx', views.export_all_excel, name='export_all'),
     
     path('presets/', views.presets_view, name='presets'),
     path('presets/create/', views.create_preset, name='create_preset'),

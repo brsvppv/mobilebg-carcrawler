@@ -2003,3 +2003,209 @@
 2026-06-15 16:07:36 [INFO]   📊 Records Saved: 20 cars
 2026-06-15 16:07:36 [INFO] 🎯 MISSION COMPLETE! 🚀
 2026-06-15 16:07:36 [INFO] ================================================================================
+2026-06-15 20:05:07 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-15 20:05:07 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-15 20:05:08 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-15 20:05:08 [INFO]  🎯 Total Results Found: 38 cars
+2026-06-15 20:05:08 [INFO]  📄 Estimated Pages: 2 pages (~20 cars per page)
+2026-06-15 20:05:08 [INFO]  ⏱️  Estimated Crawl Time: ~1.0 seconds
+2026-06-15 20:05:08 [INFO]   📄 Page 1: Found 20 links, 20 new (52.6% complete)
+2026-06-15 20:05:08 [INFO] Next page URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov/p-2?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-15 20:05:08 [INFO] 📡 Fetching Page 2: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov/p-2?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-15 20:05:09 [INFO]   📄 Page 2: Found 18 links, 18 new (100.0% complete)
+2026-06-15 20:05:09 [INFO] 🏁 No more pages found. Crawling complete!
+2026-06-15 20:05:09 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-15 20:05:09 [INFO]   📊 Total Unique Links: 38 cars
+2026-06-15 20:05:09 [INFO]   📄 Pages Processed: 2
+2026-06-15 20:05:09 [INFO]   ⏱️  Total Collection Time: 1.3 seconds
+2026-06-15 20:05:09 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-15 20:05:09 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-15 20:05:09 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-15 20:05:09 [INFO]  🎯 Total Results Found: 111 cars
+2026-06-15 20:05:09 [INFO]  📄 Estimated Pages: 6 pages (~20 cars per page)
+2026-06-15 20:05:09 [INFO]  ⏱️  Estimated Crawl Time: ~3.0 seconds
+2026-06-15 20:05:09 [INFO]   📄 Page 1: Found 20 links, 20 new (18.0% complete)
+2026-06-15 20:05:09 [INFO] 🛑 Reached max_pages=1. Stopping.
+2026-06-15 20:05:09 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-15 20:05:09 [INFO]   📊 Total Unique Links: 20 cars
+2026-06-15 20:05:09 [INFO]   📄 Pages Processed: 1
+2026-06-15 20:05:09 [INFO]   ⏱️  Total Collection Time: 0.4 seconds
+2026-06-15 20:05:09 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-15 20:05:09 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-15 20:05:10 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-15 20:05:10 [INFO]  🎯 Total Results Found: 111 cars
+2026-06-15 20:05:10 [INFO]  📄 Estimated Pages: 6 pages (~20 cars per page)
+2026-06-15 20:05:10 [INFO]  ⏱️  Estimated Crawl Time: ~3.0 seconds
+2026-06-15 20:05:10 [INFO]   📄 Page 1: Found 20 links, 20 new (18.0% complete)
+2026-06-15 20:05:10 [INFO] 🛑 Reached max_pages=1. Stopping.
+2026-06-15 20:05:10 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-15 20:05:10 [INFO]   📊 Total Unique Links: 20 cars
+2026-06-15 20:05:10 [INFO]   📄 Pages Processed: 1
+2026-06-15 20:05:10 [INFO]   ⏱️  Total Collection Time: 0.4 seconds
+2026-06-15 20:05:19 [INFO] ================================================================================
+2026-06-15 20:05:19 [INFO] 🚀 NEW CRAWLER SESSION STARTED
+2026-06-15 20:05:19 [INFO] ================================================================================
+2026-06-15 20:05:19 [INFO] 🎮 Crawler Arguments: delay=0.1s, max_pages=1, excel=docs/car-data.xlsx
+2026-06-15 20:05:19 [INFO] 🔍 SEARCH CRITERIA:
+2026-06-15 20:05:19 [INFO] 📱 Vehicle: Audi A4 (sedan)
+2026-06-15 20:05:19 [INFO] ⛽ Fuel Type: dizelov
+2026-06-15 20:05:19 [INFO] 💰 Price Range: 8000 - 35000 BGN
+2026-06-15 20:05:19 [INFO] 🔧 Engine Power: 120 - 250 HP
+2026-06-15 20:05:19 [INFO] 🔍 Validating search URL...
+2026-06-15 20:05:20 [INFO] ✅ URL validation successful
+2026-06-15 20:05:20 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-15 20:05:20 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-15 20:05:20 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-15 20:05:20 [INFO]  🎯 Total Results Found: 111 cars
+2026-06-15 20:05:20 [INFO]  📄 Estimated Pages: 6 pages (~20 cars per page)
+2026-06-15 20:05:20 [INFO]  ⏱️  Estimated Crawl Time: ~0.6 seconds
+2026-06-15 20:05:20 [INFO]   📄 Page 1: Found 20 links, 20 new (18.0% complete)
+2026-06-15 20:05:20 [INFO] 🛑 Reached max_pages=1. Stopping.
+2026-06-15 20:05:20 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-15 20:05:20 [INFO]   📊 Total Unique Links: 20 cars
+2026-06-15 20:05:20 [INFO]   📄 Pages Processed: 1
+2026-06-15 20:05:20 [INFO]   ⏱️  Total Collection Time: 0.4 seconds
+2026-06-15 20:05:20 [INFO] 🚗 STARTING DATA EXTRACTION:
+2026-06-15 20:05:20 [INFO]   📊 Total Links to Process: 20 cars
+2026-06-15 20:05:20 [INFO]   ⏱️  Estimated Time: ~6.0 seconds
+2026-06-15 20:05:20 [INFO]   [1/20] (5.0%) Processing batch...
+2026-06-15 20:05:21 [INFO]   [2/20] (10.0%) Extracting: obiava-11781080387158283-audi-a4-2-0tdi-sedan-automat-realni-km...
+2026-06-15 20:05:21 [INFO]   [3/20] (15.0%) Extracting: obiava-11734075347795908-audi-a4-2-0d-navi-automat-euro-6b...
+2026-06-15 20:05:22 [INFO]   [4/20] (20.0%) Extracting: obiava-11781463195440127-audi-a4-2-0-tdi-matrix-4x4...
+2026-06-15 20:05:22 [INFO]   [5/20] (25.0%) Extracting: obiava-11765874638347843-audi-a4-garantsiya-quattro-40-tdi...
+2026-06-15 20:05:22 [INFO]   [6/20] (30.0%) Extracting: obiava-11780045036221693-audi-a4-avtomat-2-0-150k-s-sedan-128037km-serviz...
+2026-06-15 20:05:23 [INFO]   [7/20] (35.0%) Extracting: obiava-11746888272929151-audi-a4-2-0tdi-177k-c-led-navi-blutut-euro-5b...
+2026-06-15 20:05:23 [INFO]   [8/20] (40.0%) Extracting: obiava-11780295605658112-audi-a4-2-0tdi-quattro-servizna-istoriya...
+2026-06-15 20:05:24 [INFO]   [9/20] (45.0%) Extracting: obiava-11781115535197959-audi-a4-3-0tdi-full-led-driveselect...
+2026-06-15 20:05:24 [INFO]   [10/20] (50.0%) Extracting: obiava-11774604112277131-audi-a4-4h4-204ks-at-7...
+2026-06-15 20:05:25 [INFO]   [11/20] (55.0%) Processing batch...
+2026-06-15 20:05:25 [INFO]   [12/20] (60.0%) Extracting: obiava-11763801721905558-audi-a4-2-0tdi-quattro-190k-s...
+2026-06-15 20:05:26 [INFO]   [13/20] (65.0%) Extracting: obiava-11773649977054704-audi-a4-hybrid...
+2026-06-15 20:05:26 [INFO]   [14/20] (70.0%) Extracting: obiava-11781198509975533-audi-a4-2-0-tdi-s-line-avtomat-face-navi-kozha...
+2026-06-15 20:05:26 [INFO]   [15/20] (75.0%) Extracting: obiava-11775489880975355-audi-a4-sline-v6...
+2026-06-15 20:05:27 [INFO]   [16/20] (80.0%) Extracting: obiava-11733929594530386-audi-a4-35tdi-avtomat...
+2026-06-15 20:05:27 [INFO]   [17/20] (85.0%) Extracting: obiava-11767296395514018-audi-a4-limousine-4-0-tdi-soft-hybrid...
+2026-06-15 20:05:28 [INFO]   [18/20] (90.0%) Extracting: obiava-11776880635763985-audi-a4-2-0tdi-quattro-s-line...
+2026-06-15 20:05:29 [INFO]   [19/20] (95.0%) Extracting: obiava-11707544569037725-audi-a4-2-0tdi-143kc...
+2026-06-15 20:05:29 [INFO]   [20/20] (100.0%) Processing batch...
+2026-06-15 20:05:29 [INFO]   [20/20] (100.0%) Extracting: obiava-11775752917098512-audi-a4...
+2026-06-15 20:05:30 [INFO] 📈 EXTRACTION COMPLETE!
+2026-06-15 20:05:30 [INFO]   ✅ Successful Extractions: 20 cars
+2026-06-15 20:05:30 [INFO]   ❌ Failed Extractions: 0 cars
+2026-06-15 20:05:30 [INFO]   📊 Success Rate: 100.0%
+2026-06-15 20:05:30 [INFO]   ⏱️  Total Extraction Time: 9.7 seconds
+2026-06-15 20:05:30 [INFO]   ⚡ Average Time per Car: 0.48 seconds
+2026-06-15 20:05:30 [INFO] 💰 PRICE ANALYSIS:
+2026-06-15 20:05:30 [INFO]   📊 Cars with Valid Prices: 20/20
+2026-06-15 20:05:30 [INFO]   💵 Average Price: 16,947 BGN
+2026-06-15 20:05:30 [INFO]   📉 Minimum Price: 8,400 BGN
+2026-06-15 20:05:30 [INFO]   📈 Maximum Price: 30,760 BGN
+2026-06-15 20:05:30 [INFO] 💾 EXCEL EXPORT COMPLETE!
+2026-06-15 20:05:30 [INFO]   📁 File: docs/car-data.xlsx
+2026-06-15 20:05:30 [INFO]   📋 Sheet: Audi-A4
+2026-06-15 20:05:30 [INFO]   📊 Records Saved: 20 cars
+2026-06-15 20:05:30 [INFO] 🎯 MISSION COMPLETE! 🚀
+2026-06-15 20:05:30 [INFO] ================================================================================
+2026-06-16 10:01:49 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-16 10:01:49 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-16 10:01:50 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-16 10:01:50 [INFO]  🎯 Total Results Found: 38 cars
+2026-06-16 10:01:50 [INFO]  📄 Estimated Pages: 2 pages (~20 cars per page)
+2026-06-16 10:01:50 [INFO]  ⏱️  Estimated Crawl Time: ~1.0 seconds
+2026-06-16 10:01:50 [INFO]   📄 Page 1: Found 20 links, 20 new (52.6% complete)
+2026-06-16 10:01:50 [INFO] Next page URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov/p-2?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-16 10:01:51 [INFO] 📡 Fetching Page 2: https://www.mobile.bg/obiavi/avtomobili-dzhipove/mitsubishi/outlander/dzhip/benzinov/p-2?price=5000&price1=9000&engine_power=100&engine_power1=200
+2026-06-16 10:01:51 [INFO]   📄 Page 2: Found 18 links, 18 new (100.0% complete)
+2026-06-16 10:01:51 [INFO] 🏁 No more pages found. Crawling complete!
+2026-06-16 10:01:51 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-16 10:01:51 [INFO]   📊 Total Unique Links: 38 cars
+2026-06-16 10:01:51 [INFO]   📄 Pages Processed: 2
+2026-06-16 10:01:51 [INFO]   ⏱️  Total Collection Time: 1.6 seconds
+2026-06-16 10:01:51 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-16 10:01:51 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-16 10:01:52 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-16 10:01:52 [INFO]  🎯 Total Results Found: 110 cars
+2026-06-16 10:01:52 [INFO]  📄 Estimated Pages: 6 pages (~20 cars per page)
+2026-06-16 10:01:52 [INFO]  ⏱️  Estimated Crawl Time: ~3.0 seconds
+2026-06-16 10:01:52 [INFO]   📄 Page 1: Found 21 links, 21 new (19.1% complete)
+2026-06-16 10:01:52 [INFO] 🛑 Reached max_pages=1. Stopping.
+2026-06-16 10:01:52 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-16 10:01:52 [INFO]   📊 Total Unique Links: 21 cars
+2026-06-16 10:01:52 [INFO]   📄 Pages Processed: 1
+2026-06-16 10:01:52 [INFO]   ⏱️  Total Collection Time: 0.6 seconds
+2026-06-16 10:01:53 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-16 10:01:53 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-16 10:01:53 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-16 10:01:53 [INFO]  🎯 Total Results Found: 110 cars
+2026-06-16 10:01:53 [INFO]  📄 Estimated Pages: 6 pages (~20 cars per page)
+2026-06-16 10:01:53 [INFO]  ⏱️  Estimated Crawl Time: ~3.0 seconds
+2026-06-16 10:01:53 [INFO]   📄 Page 1: Found 21 links, 21 new (19.1% complete)
+2026-06-16 10:01:53 [INFO] 🛑 Reached max_pages=1. Stopping.
+2026-06-16 10:01:53 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-16 10:01:53 [INFO]   📊 Total Unique Links: 21 cars
+2026-06-16 10:01:53 [INFO]   📄 Pages Processed: 1
+2026-06-16 10:01:53 [INFO]   ⏱️  Total Collection Time: 0.6 seconds
+2026-06-16 10:02:09 [INFO] ================================================================================
+2026-06-16 10:02:09 [INFO] 🚀 NEW CRAWLER SESSION STARTED
+2026-06-16 10:02:09 [INFO] ================================================================================
+2026-06-16 10:02:09 [INFO] 🎮 Crawler Arguments: delay=0.1s, max_pages=1, excel=docs/car-data.xlsx
+2026-06-16 10:02:09 [INFO] 🔍 SEARCH CRITERIA:
+2026-06-16 10:02:09 [INFO] 📱 Vehicle: Audi A4 (sedan)
+2026-06-16 10:02:09 [INFO] ⛽ Fuel Type: dizelov
+2026-06-16 10:02:09 [INFO] 💰 Price Range: 8000 - 35000 BGN
+2026-06-16 10:02:09 [INFO] 🔧 Engine Power: 120 - 250 HP
+2026-06-16 10:02:09 [INFO] 🔍 Validating search URL...
+2026-06-16 10:02:10 [INFO] ✅ URL validation successful
+2026-06-16 10:02:10 [INFO] 🔗 Search URL: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-16 10:02:10 [INFO] 📡 Fetching Page 1: https://www.mobile.bg/obiavi/avtomobili-dzhipove/audi/a4/sedan/dizelov?price=8000&price1=35000&engine_power=120&engine_power1=250
+2026-06-16 10:02:11 [INFO] 📊 SEARCH RESULTS SUMMARY:
+2026-06-16 10:02:11 [INFO]  🎯 Total Results Found: 110 cars
+2026-06-16 10:02:11 [INFO]  📄 Estimated Pages: 6 pages (~20 cars per page)
+2026-06-16 10:02:11 [INFO]  ⏱️  Estimated Crawl Time: ~0.6 seconds
+2026-06-16 10:02:11 [INFO]   📄 Page 1: Found 21 links, 21 new (19.1% complete)
+2026-06-16 10:02:11 [INFO] 🛑 Reached max_pages=1. Stopping.
+2026-06-16 10:02:11 [INFO] 🔗 LINK COLLECTION COMPLETE!
+2026-06-16 10:02:11 [INFO]   📊 Total Unique Links: 21 cars
+2026-06-16 10:02:11 [INFO]   📄 Pages Processed: 1
+2026-06-16 10:02:11 [INFO]   ⏱️  Total Collection Time: 0.6 seconds
+2026-06-16 10:02:11 [INFO] 🚗 STARTING DATA EXTRACTION:
+2026-06-16 10:02:11 [INFO]   📊 Total Links to Process: 21 cars
+2026-06-16 10:02:11 [INFO]   ⏱️  Estimated Time: ~6.3 seconds
+2026-06-16 10:02:11 [INFO]   [1/21] (4.8%) Processing batch...
+2026-06-16 10:02:11 [INFO]   [2/21] (9.5%) Extracting: obiava-11775752917098512-audi-a4...
+2026-06-16 10:02:12 [INFO]   [3/21] (14.3%) Extracting: obiava-11781115535197959-audi-a4-3-0tdi-full-led-driveselect...
+2026-06-16 10:02:12 [INFO]   [4/21] (19.0%) Extracting: obiava-11781080387158283-audi-a4-2-0tdi-sedan-automat-realni-km...
+2026-06-16 10:02:13 [INFO]   [5/21] (23.8%) Extracting: obiava-11767296395514018-audi-a4-limousine-4-0-tdi-soft-hybrid...
+2026-06-16 10:02:13 [INFO]   [6/21] (28.6%) Extracting: obiava-11746888272929151-audi-a4-2-0tdi-177k-c-led-navi-blutut-euro-5b...
+2026-06-16 10:02:14 [INFO]   [7/21] (33.3%) Extracting: obiava-11780295605658112-audi-a4-2-0tdi-quattro-servizna-istoriya...
+2026-06-16 10:02:15 [INFO]   [8/21] (38.1%) Extracting: obiava-11733929594530386-audi-a4-35tdi-avtomat...
+2026-06-16 10:02:15 [INFO]   [9/21] (42.9%) Extracting: obiava-11777043107282597-audi-a4-3-0tdi-231hp-82-000km-quattro-matrix-eu6d?#player...
+2026-06-16 10:02:16 [INFO]   [10/21] (47.6%) Extracting: obiava-11734075347795908-audi-a4-2-0d-navi-automat-euro-6b...
+2026-06-16 10:02:16 [INFO]   [11/21] (52.4%) Processing batch...
+2026-06-16 10:02:17 [INFO]   [12/21] (57.1%) Extracting: obiava-11763801721905558-audi-a4-2-0tdi-quattro-190k-s...
+2026-06-16 10:02:17 [INFO]   [13/21] (61.9%) Extracting: obiava-11781198509975533-audi-a4-2-0-tdi-s-line-avtomat-face-navi-kozha...
+2026-06-16 10:02:18 [INFO]   [14/21] (66.7%) Extracting: obiava-11776880635763985-audi-a4-2-0tdi-quattro-s-line...
+2026-06-16 10:02:18 [INFO]   [15/21] (71.4%) Extracting: obiava-11780045036221693-audi-a4-avtomat-2-0-150k-s-sedan-128037km-serviz...
+2026-06-16 10:02:19 [INFO]   [16/21] (76.2%) Extracting: obiava-11775489880975355-audi-a4-sline-v6...
+2026-06-16 10:02:19 [INFO]   [17/21] (81.0%) Extracting: obiava-11777043107282597-audi-a4-3-0tdi-231hp-82-000km-quattro-matrix-eu6d...
+2026-06-16 10:02:20 [INFO]   [18/21] (85.7%) Extracting: obiava-11707544569037725-audi-a4-2-0tdi-143kc...
+2026-06-16 10:02:20 [INFO]   [19/21] (90.5%) Extracting: obiava-11781463195440127-audi-a4-2-0-tdi-matrix-4x4...
+2026-06-16 10:02:21 [INFO]   [20/21] (95.2%) Extracting: obiava-11781519331950600-audi-a4...
+2026-06-16 10:02:22 [INFO]   [21/21] (100.0%) Processing batch...
+2026-06-16 10:02:22 [INFO] 📈 EXTRACTION COMPLETE!
+2026-06-16 10:02:22 [INFO]   ✅ Successful Extractions: 21 cars
+2026-06-16 10:02:22 [INFO]   ❌ Failed Extractions: 0 cars
+2026-06-16 10:02:22 [INFO]   📊 Success Rate: 100.0%
+2026-06-16 10:02:22 [INFO]   ⏱️  Total Extraction Time: 11.7 seconds
+2026-06-16 10:02:22 [INFO]   ⚡ Average Time per Car: 0.55 seconds
+2026-06-16 10:02:22 [INFO] 💰 PRICE ANALYSIS:
+2026-06-16 10:02:22 [INFO]   📊 Cars with Valid Prices: 21/21
+2026-06-16 10:02:22 [INFO]   💵 Average Price: 18,050 BGN
+2026-06-16 10:02:22 [INFO]   📉 Minimum Price: 8,400 BGN
+2026-06-16 10:02:22 [INFO]   📈 Maximum Price: 30,760 BGN
+2026-06-16 10:02:22 [INFO] 💾 EXCEL EXPORT COMPLETE!
+2026-06-16 10:02:22 [INFO]   📁 File: docs/car-data.xlsx
+2026-06-16 10:02:22 [INFO]   📋 Sheet: Audi-A4
+2026-06-16 10:02:22 [INFO]   📊 Records Saved: 21 cars
+2026-06-16 10:02:22 [INFO] 🎯 MISSION COMPLETE! 🚀
+2026-06-16 10:02:22 [INFO] ================================================================================

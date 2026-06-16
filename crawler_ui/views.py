@@ -272,7 +272,7 @@ def delete_listing(request, listing_id):
     return redirect('results')
 
 
-def export_session_excel(request, session_id):
+def export_session_excel(request, session_id, filename=None):
     # Ensure session_id is a UUID object (or handle string conversions)
     from uuid import UUID
     if isinstance(session_id, str):
@@ -283,15 +283,13 @@ def export_session_excel(request, session_id):
             
     session = get_object_or_404(CrawlSession, id=session_id)
     
-    # Construct a descriptive user-facing download filename based on search description
-    clean_desc = "".join(c for c in session.search_description if c.isalnum() or c in (' ', '-', '_')).strip()
-    clean_desc = clean_desc.replace(' ', '_').replace('-', '_').lower()
-    download_filename = f"export_{clean_desc}_{session_id.hex[:6]}.xlsx" if clean_desc else f"export_{session_id.hex[:6]}.xlsx"
+    canonical_filename = session.download_filename
+    if filename != canonical_filename:
+        return redirect('export_session', session_id=session.id, filename=canonical_filename)
     
     if session.excel_file_path and os.path.exists(session.excel_file_path):
-        response = FileResponse(open(session.excel_file_path, 'rb'), as_attachment=True, filename=download_filename)
+        response = FileResponse(open(session.excel_file_path, 'rb'), as_attachment=True, filename=canonical_filename)
         response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        response['Content-Disposition'] = f'attachment; filename="{download_filename}"'
         return response
     else:
         # Generate on the fly
@@ -318,19 +316,21 @@ def export_session_excel(request, session_id):
                 'Car Extras': car.extras or ''
             })
             
-        filename = f"docs/export-{session_id.hex[:6]}.xlsx"
+        filename_on_disk = f"docs/export-{session_id.hex[:6]}.xlsx"
         os.makedirs("docs", exist_ok=True)
-        excel_utils.export_to_excel(cars_data, filename, "Scraped-Cars")
-        session.excel_file_path = filename
+        excel_utils.export_to_excel(cars_data, filename_on_disk, "Scraped-Cars")
+        session.excel_file_path = filename_on_disk
         session.save(update_fields=['excel_file_path'])
         
-        response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=download_filename)
+        response = FileResponse(open(filename_on_disk, 'rb'), as_attachment=True, filename=canonical_filename)
         response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        response['Content-Disposition'] = f'attachment; filename="{download_filename}"'
         return response
  
  
 def export_all_excel(request):
+    if not request.path.endswith('.xlsx'):
+        return redirect('export_all')
+        
     listings = CarListing.objects.all()
     if not listings:
         return HttpResponse("No listings to export", status=400)
@@ -361,7 +361,6 @@ def export_all_excel(request):
     download_filename = "all_cars_export.xlsx"
     response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=download_filename)
     response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    response['Content-Disposition'] = f'attachment; filename="{download_filename}"'
     return response
 
 

@@ -74,7 +74,7 @@
                             <span style="font-size: 0.72rem; color: var(--text-muted);">Cars Found</span>
                         </div>
                         {% if session.excel_file_path %}
-                            <a href="{% url 'export_session' session.id %}" class="btn btn-secondary btn-xs" title="Download Excel" download="export-{{ session.search_description|slugify }}.xlsx" target="_blank">💾</a>
+                            <a href="{% url 'export_session' session.id session.download_filename %}" class="btn btn-secondary btn-xs" title="Download Excel" download="{{ session.download_filename }}" target="_blank">💾</a>
                         {% endif %}
                     </div>
                 </div>
